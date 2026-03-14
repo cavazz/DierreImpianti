@@ -1,202 +1,187 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Award, ShieldCheck, Clock, CheckCircle2, Star, Headphones, MapPin, Phone, Mail, CalendarDays } from 'lucide-react'
+import { MapPin, Phone, Mail } from 'lucide-react'
 
 const values = [
-  { icon: Award,        text: 'Installatori certificati e qualificati' },
-  { icon: ShieldCheck,  text: 'Garanzia su tutti i lavori eseguiti' },
-  { icon: Clock,        text: 'Interventi rapidi e puntuali' },
-  { icon: CheckCircle2, text: 'Rispetto delle normative vigenti' },
-  { icon: Star,         text: 'Materiali di prima qualità' },
-  { icon: Headphones,   text: 'Assistenza tecnica post-vendita' },
+  'Installatori certificati e qualificati',
+  'Garanzia su tutti i lavori eseguiti',
+  'Interventi rapidi e puntuali',
+  'Rispetto delle normative vigenti',
+  'Materiali di prima qualità',
+  'Assistenza tecnica post-vendita',
 ]
-
-const contacts = [
-  {
-    icon: MapPin,
-    label: 'Sede',
-    value: 'Via Madonna Della Mercede 6\n35028 Piove di Sacco (PD)',
-    href: 'https://maps.google.com/?q=Via+Madonna+Della+Mercede+6+Piove+di+Sacco+PD',
-    external: true,
-  },
-  {
-    icon: Phone,
-    label: 'Telefono',
-    value: '+39 347 317 7613',
-    href: 'tel:+393473177613',
-    external: false,
-  },
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'info@dierreimpianti.it',
-    href: 'mailto:info@dierreimpianti.it',
-    external: false,
-  },
-]
-
-const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.07, delayChildren: 0.2 } } }
-const fadeLeft  = { hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0, transition: { duration: 0.65, ease: [0.25,0.46,0.45,0.94] } } }
-const fadeRight = { hidden: { opacity: 0, x:  20 }, show: { opacity: 1, x: 0, transition: { duration: 0.65, delay: 0.15, ease: [0.25,0.46,0.45,0.94] } } }
-const fadeUp    = { hidden: { opacity: 0, y: 12  }, show: { opacity: 1, y: 0, transition: { duration: 0.5,  ease: [0.25,0.46,0.45,0.94] } } }
 
 export default function About() {
   const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, margin: '-60px' })
 
   return (
-    <section id="chi-siamo" aria-labelledby="about-title" className="section-pad bg-surface">
-      <div className="absolute inset-x-0 top-0 divider" aria-hidden="true"/>
+    <section id="chi-siamo" aria-labelledby="about-title" className="bg-bg">
+      <div className="container-xl section-pad">
 
-      <div ref={ref} className="container-xl">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 lg:gap-20 items-start">
+        {/* Header — mirrors Services header style */}
+        <motion.header
+          ref={ref}
+          initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 pb-10 border-b border-border">
+          <div>
+            <span className="label">Chi Siamo</span>
+            <h2 id="about-title"
+              className="font-display font-black text-text-p"
+              style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', letterSpacing: '-0.035em', lineHeight: 1.08 }}>
+              Professionalità<br/>dal 2003.
+            </h2>
+          </div>
+          <p className="text-text-s text-base leading-relaxed md:max-w-xs md:text-right">
+            Dalla progettazione alla manutenzione, un'unica impresa di fiducia nella provincia di Padova.
+          </p>
+        </motion.header>
 
-          {/* ── Left: story ── */}
-          <motion.div variants={stagger} initial="hidden" animate={inView ? 'show' : 'hidden'}>
+        {/* Body */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
-            <motion.span variants={fadeLeft} className="label">Chi Siamo</motion.span>
+          {/* ── Left: editorial story ── */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.1 }}>
 
-            <motion.h2
-              variants={fadeLeft}
-              id="about-title"
-              className="font-display font-black text-text-p mb-5"
-              style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-              Oltre 20 anni<br/>al tuo servizio.
-            </motion.h2>
-
-            {/* Founded badge */}
-            <motion.div variants={fadeLeft} className="mb-7">
-              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[11px] font-bold tracking-[0.08em]"
-                style={{ background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.2)', color: '#EA6C00' }}>
-                <CalendarDays size={12} aria-hidden="true"/>
-                Fondati nell'Aprile 2003
+            {/* Big display number */}
+            <div className="mb-10" aria-hidden="true">
+              <span
+                className="font-display font-black leading-none select-none"
+                style={{ fontSize: 'clamp(7rem, 18vw, 13rem)', color: '#F97316', letterSpacing: '-0.06em', lineHeight: 0.85 }}>
+                20
               </span>
-            </motion.div>
+              <p className="text-text-s text-sm font-medium tracking-wide mt-3">
+                anni di esperienza nel settore
+              </p>
+            </div>
 
-            <motion.p variants={fadeLeft} className="text-text-s text-base leading-relaxed mb-5">
-              <strong className="text-text-p font-semibold">Dierre Impianti</strong> è l'impresa di{' '}
-              <strong className="text-text-p font-semibold">Dainese Roberto</strong>, nata nell'aprile
-              2003 con l'obiettivo di fornire progettazione, realizzazione e manutenzione di impianti
+            <p className="text-text-p text-base leading-relaxed mb-5" style={{ fontSize: '1.0625rem' }}>
+              <strong className="font-display font-700">Dierre Impianti</strong> è l'impresa di{' '}
+              <strong className="font-display font-700">Dainese Roberto</strong>, fondata nell'aprile 2003
+              con l'obiettivo di fornire progettazione, realizzazione e manutenzione di impianti
               tecnologici nella provincia di Padova.
-            </motion.p>
-
-            <motion.p variants={fadeLeft} className="text-text-s text-base leading-relaxed mb-10">
+            </p>
+            <p className="text-text-s text-base leading-relaxed mb-12">
               Dalla sede di <strong className="text-text-p font-medium">Piove di Sacco</strong> offriamo
               un servizio completo: dall'impianto elettrico civile al fotovoltaico industriale, dalla
-              domotica alla sicurezza.{' '}
-              <strong className="text-text-p font-medium">Chiarezza e professionalità dalla progettazione
-              all'assistenza post-vendita.</strong>
-            </motion.p>
+              domotica alla sicurezza. Chiarezza e professionalità dalla progettazione all'assistenza post-vendita.
+            </p>
 
-            {/* Values */}
-            <motion.div variants={stagger} className="grid grid-cols-1 sm:grid-cols-2 gap-2.5"
-              role="list" aria-label="I nostri valori">
-              {values.map(({ icon: Icon, text }) => (
-                <motion.div
-                  key={text}
-                  variants={fadeUp}
-                  role="listitem"
-                  className="flex items-center gap-3 px-4 py-3.5 rounded-2xl bg-bg border border-border group hover:border-accent/30 hover:bg-accent/[0.03] transition-all duration-200">
-                  <div className="icon-box-sm group-hover:bg-accent/12 transition-colors duration-200"
-                    aria-hidden="true">
-                    <Icon size={14} className="text-accent"/>
-                  </div>
-                  <span className="text-text-s text-sm font-medium">{text}</span>
-                </motion.div>
+            {/* Values list — editorial rows, no cards */}
+            <div role="list" aria-label="I nostri valori">
+              {values.map((v, i) => (
+                <ValueRow key={v} text={v} index={i} inView={inView}/>
               ))}
-            </motion.div>
+            </div>
           </motion.div>
 
-          {/* ── Right: contact card ── */}
+          {/* ── Right: company info ── */}
           <motion.div
-            variants={fadeRight} initial="hidden" animate={inView ? 'show' : 'hidden'}
-            className="flex flex-col gap-4 lg:sticky lg:top-24">
+            initial={{ opacity: 0, x: 20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="lg:sticky lg:top-24 flex flex-col gap-0">
 
-            {/* Main info card */}
-            <div className="card p-7 md:p-8">
-
-              {/* Company header */}
-              <div className="flex items-center gap-4 mb-7">
-                <div className="w-12 h-12 rounded-2xl bg-accent flex items-center justify-center flex-shrink-0"
-                  style={{ boxShadow: '0 4px 18px rgba(249,115,22,0.45)' }}
+            {/* Company block */}
+            <div className="pb-8 mb-8 border-b border-border">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="w-9 h-9 rounded-md bg-accent flex items-center justify-center flex-shrink-0"
                   aria-hidden="true">
-                  <span className="text-white font-display font-black text-sm tracking-tighter">DR</span>
-                </div>
+                  <span className="text-white font-display font-black text-xs tracking-tighter">DR</span>
+                </span>
                 <div>
-                  <p className="font-display font-700 text-text-p text-base leading-tight">Dierre Impianti</p>
-                  <p className="text-text-s text-sm">di Dainese Roberto</p>
+                  <p className="font-display font-700 text-text-p text-sm leading-tight">Dierre Impianti</p>
+                  <p className="text-text-s text-xs">di Dainese Roberto</p>
                 </div>
               </div>
-
-              <div className="divider mb-7" aria-hidden="true"/>
-
-              {/* Contact list */}
-              <address className="not-italic space-y-5">
-                {contacts.map(({ icon: Icon, label, value, href, external }) => (
-                  <div key={label} className="flex items-start gap-3.5">
-                    <div className="icon-box-sm mt-0.5" aria-hidden="true">
-                      <Icon size={14} className="text-accent"/>
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-s mb-1">{label}</p>
-                      <a
-                        href={href}
-                        {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                        className="text-text-p text-sm font-medium leading-relaxed whitespace-pre-line hover:text-accent transition-colors duration-200">
-                        {value}
-                        {external && <span className="sr-only"> (apre Google Maps in una nuova scheda)</span>}
-                      </a>
-                    </div>
+              <dl className="space-y-0">
+                {[
+                  ['P.IVA',       '05181630285'],
+                  ['Fondazione',  'Aprile 2003'],
+                  ['Sede',        'Piove di Sacco (PD)'],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between py-3.5 border-b border-border last:border-0">
+                    <dt className="text-text-xs text-[11px] font-bold uppercase tracking-[0.15em]">{k}</dt>
+                    <dd className="text-text-p text-sm font-medium">{v}</dd>
                   </div>
                 ))}
-              </address>
+              </dl>
+            </div>
 
-              <div className="divider my-7" aria-hidden="true"/>
-
-              {/* Status */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2" role="status" aria-label="Stato: disponibile per nuovi lavori">
-                  <div className="relative flex h-2 w-2" aria-hidden="true">
-                    <span className="animate-ping absolute inset-0 rounded-full bg-emerald-400 opacity-60"/>
-                    <span className="relative rounded-full h-2 w-2 bg-emerald-500"/>
+            {/* Contacts */}
+            <address className="not-italic space-y-0">
+              {[
+                { Icon: Phone,  label: 'Telefono', value: '+39 347 317 7613',                                           href: 'tel:+393473177613',            ext: false },
+                { Icon: Mail,   label: 'Email',    value: 'info@dierreimpianti.it',                                     href: 'mailto:info@dierreimpianti.it', ext: false },
+                { Icon: MapPin, label: 'Indirizzo', value: 'Via Madonna Della Mercede 6\n35028 Piove di Sacco (PD)',    href: 'https://maps.google.com/?q=Via+Madonna+Della+Mercede+6+Piove+di+Sacco+PD', ext: true },
+              ].map(({ Icon, label, value, href, ext }) => (
+                <a
+                  key={label}
+                  href={href}
+                  {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="flex items-start gap-4 py-4 border-b border-border last:border-0 group hover:bg-surface -mx-5 md:-mx-12 lg:-mx-20 px-5 md:px-12 lg:px-20 transition-colors duration-150">
+                  <span className="w-8 h-8 rounded-lg bg-surface group-hover:bg-accent/10 flex items-center justify-center flex-shrink-0 transition-colors duration-150 mt-0.5"
+                    aria-hidden="true">
+                    <Icon size={14} className="text-accent"/>
+                  </span>
+                  <div>
+                    <p className="text-text-xs text-[10px] font-bold uppercase tracking-[0.15em] mb-0.5">{label}</p>
+                    <p className="text-text-p text-sm font-medium leading-relaxed whitespace-pre-line group-hover:text-accent transition-colors duration-150">
+                      {value}
+                      {ext && <span className="sr-only"> (apre Google Maps in una nuova scheda)</span>}
+                    </p>
                   </div>
-                  <span className="text-text-s text-xs font-medium">Disponibile per nuovi lavori</span>
-                </div>
-                <span className="text-text-xs text-xs font-display font-600">Dal 2003</span>
-              </div>
-            </div>
-
-            {/* Info row */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="card px-5 py-4 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-s mb-1.5">P.IVA</p>
-                <p className="text-text-p text-sm font-mono font-semibold">05181630285</p>
-              </div>
-              <div className="card px-5 py-4 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-text-s mb-1.5">Fondazione</p>
-                <p className="text-text-p text-sm font-semibold">Aprile 2003</p>
-              </div>
-            </div>
+                </a>
+              ))}
+            </address>
 
             {/* Hours */}
-            <div className="card px-6 py-5">
-              <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-s mb-4">Orari di Lavoro</p>
+            <div className="mt-8 pt-8 border-t border-border">
+              <p className="text-text-xs text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Orari di Lavoro</p>
               <dl>
                 {[
                   ['Lunedì – Venerdì', '8:00 – 18:00', false],
                   ['Sabato',           '8:00 – 12:00', false],
                   ['Domenica',         'Chiuso',        true ],
                 ].map(([d, h, closed]) => (
-                  <div key={d} className="flex justify-between items-center py-2 border-b border-border last:border-0">
+                  <div key={d} className="flex justify-between items-center py-3 border-b border-border last:border-0">
                     <dt className="text-text-s text-sm">{d}</dt>
-                    <dd className={`text-sm font-semibold ${closed ? 'text-text-xs' : 'text-text-p'}`}>{h}</dd>
+                    <dd className={`text-sm font-semibold tabular-nums ${closed ? 'text-text-xs' : 'text-text-p'}`}>{h}</dd>
                   </div>
                 ))}
               </dl>
+            </div>
+
+            {/* Availability pill */}
+            <div className="mt-8 flex items-center gap-2.5" role="status" aria-label="Disponibile per nuovi lavori">
+              <div className="relative flex h-2 w-2" aria-hidden="true">
+                <span className="animate-ping absolute inset-0 rounded-full bg-emerald-400 opacity-60"/>
+                <span className="relative rounded-full h-2 w-2 bg-emerald-500"/>
+              </div>
+              <span className="text-text-s text-xs font-medium">Disponibile per nuovi lavori</span>
             </div>
           </motion.div>
         </div>
       </div>
     </section>
+  )
+}
+
+function ValueRow({ text, index, inView }) {
+  const ref = useRef(null)
+  const rv  = useInView(ref, { once: true, margin: '-20px' })
+  return (
+    <motion.div
+      ref={ref}
+      role="listitem"
+      initial={{ opacity: 0, x: -12 }}
+      animate={(inView || rv) ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.45, delay: 0.1 + index * 0.05, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="flex items-center gap-4 py-3.5 border-b border-border last:border-0">
+      <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" aria-hidden="true"/>
+      <span className="text-text-s text-sm font-medium">{text}</span>
+    </motion.div>
   )
 }

@@ -1,24 +1,18 @@
 import { useRef, useState, useId } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Phone, Mail, MapPin, Send, CheckCircle, Clock } from 'lucide-react'
+import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react'
 
 const infoItems = [
-  { icon: Phone,  label: 'Telefono', value: '+39 347 317 7613',                                    href: 'tel:+393473177613',            external: false },
-  { icon: Mail,   label: 'Email',    value: 'info@dierreimpianti.it',                              href: 'mailto:info@dierreimpianti.it', external: false },
-  { icon: MapPin, label: 'Sede',     value: 'Via Madonna Della Mercede 6\n35028 Piove di Sacco (PD)', href: 'https://maps.google.com/?q=Via+Madonna+Della+Mercede+6+Piove+di+Sacco+PD', external: true },
-]
-
-const hours = [
-  ['Lunedì – Venerdì', '8:00 – 18:00', false],
-  ['Sabato',           '8:00 – 12:00', false],
-  ['Domenica',         'Chiuso',        true ],
+  { Icon: Phone,  label: 'Telefono', value: '+39 347 317 7613',                                           href: 'tel:+393473177613',            ext: false },
+  { Icon: Mail,   label: 'Email',    value: 'info@dierreimpianti.it',                                     href: 'mailto:info@dierreimpianti.it', ext: false },
+  { Icon: MapPin, label: 'Sede',     value: 'Via Madonna Della Mercede 6\n35028 Piove di Sacco (PD)',     href: 'https://maps.google.com/?q=Via+Madonna+Della+Mercede+6+Piove+di+Sacco+PD', ext: true },
 ]
 
 const inputCls = [
-  'w-full px-4 py-3.5 rounded-2xl text-sm text-text-p font-sans',
-  'bg-bg border border-border',
-  'focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/15',
-  'placeholder:text-text-s/50',
+  'w-full px-4 py-3.5 rounded-lg text-sm font-sans',
+  'bg-white/5 border border-white/12 text-white',
+  'focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30',
+  'placeholder:text-white/25',
   'transition-all duration-200',
   'min-h-[52px]',
 ].join(' ')
@@ -27,7 +21,7 @@ function Field({ id, label, required, children }) {
   return (
     <div>
       <label htmlFor={id}
-        className="block text-[10px] font-bold uppercase tracking-[0.18em] text-text-s mb-2">
+        className="block text-[10px] font-bold uppercase tracking-[0.18em] text-white/40 mb-2">
         {label}{required && <span className="text-accent ml-1" aria-hidden="true">*</span>}
         {required && <span className="sr-only"> (obbligatorio)</span>}
       </label>
@@ -39,7 +33,7 @@ function Field({ id, label, required, children }) {
 export default function Contact() {
   const uid    = useId()
   const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
+  const inView = useInView(ref, { once: true, margin: '-60px' })
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
 
@@ -56,68 +50,68 @@ export default function Contact() {
   }
 
   return (
-    <section id="contatti" aria-labelledby="contact-title" className="section-pad bg-bg">
-      <div className="absolute inset-x-0 top-0 divider" aria-hidden="true"/>
-
-      <div ref={ref} className="container-xl">
+    <section id="contatti" aria-labelledby="contact-title" className="bg-dark">
+      <div ref={ref} className="container-xl section-pad">
 
         {/* Header */}
         <motion.header
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-14 md:mb-18">
-          <span className="label">Contatti</span>
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
-            <h2
-              id="contact-title"
-              className="font-display font-black text-text-p"
-              style={{ fontSize: 'clamp(2rem, 4.5vw, 3.25rem)', letterSpacing: '-0.03em', lineHeight: 1.12 }}>
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 pb-10 border-b border-white/8">
+          <div>
+            <span className="label-dark">Contatti</span>
+            <h2 id="contact-title"
+              className="font-display font-black text-white"
+              style={{ fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', letterSpacing: '-0.035em', lineHeight: 1.08 }}>
               Parliamo del tuo<br/>prossimo progetto.
             </h2>
-            <p className="text-text-s text-base leading-relaxed md:max-w-xs md:text-right">
-              Preventivo gratuito e senza impegno.<br/>Risposta rapida garantita.
-            </p>
           </div>
+          <p className="text-white/40 text-base leading-relaxed md:max-w-xs md:text-right">
+            Preventivo gratuito e senza impegno.<br/>Risposta rapida garantita.
+          </p>
         </motion.header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
-          {/* ── Left: info ── */}
+          {/* ── Left: contact info ── */}
           <motion.div
             initial={{ opacity: 0, x: -20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.65, delay: 0.1 }}
-            className="lg:col-span-2 flex flex-col gap-3">
+            transition={{ duration: 0.7, delay: 0.1 }}>
 
-            {infoItems.map(({ icon: Icon, label, value, href, external }) => (
-              <a
-                key={label}
-                href={href}
-                {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="card card-interactive flex items-start gap-4 p-5 group no-underline">
-                <div className="icon-box group-hover:bg-accent/14 transition-colors duration-200" aria-hidden="true">
-                  <Icon size={18} className="text-accent"/>
-                </div>
-                <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-s mb-1">{label}</p>
-                  <p className="text-text-p text-sm font-medium leading-relaxed whitespace-pre-line group-hover:text-accent transition-colors duration-200">
-                    {value}
-                    {external && <span className="sr-only"> (apre Google Maps)</span>}
-                  </p>
-                </div>
-              </a>
-            ))}
+            <address className="not-italic space-y-0 mb-12">
+              {infoItems.map(({ Icon, label, value, href, ext }) => (
+                <a
+                  key={label}
+                  href={href}
+                  {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  className="flex items-start gap-4 py-5 border-b border-white/8 last:border-0 group transition-colors duration-150">
+                  <span className="w-9 h-9 rounded-lg border border-white/12 group-hover:border-accent/40 group-hover:bg-accent/10 flex items-center justify-center flex-shrink-0 transition-all duration-150 mt-0.5"
+                    aria-hidden="true">
+                    <Icon size={14} className="text-accent"/>
+                  </span>
+                  <div>
+                    <p className="text-white/35 text-[10px] font-bold uppercase tracking-[0.15em] mb-1">{label}</p>
+                    <p className="text-white/70 text-sm font-medium leading-relaxed whitespace-pre-line group-hover:text-white transition-colors duration-150">
+                      {value}
+                      {ext && <span className="sr-only"> (apre Google Maps in una nuova scheda)</span>}
+                    </p>
+                  </div>
+                </a>
+              ))}
+            </address>
 
             {/* Hours */}
-            <div className="card p-5">
-              <div className="flex items-center gap-2 mb-4">
-                <Clock size={13} className="text-accent" aria-hidden="true"/>
-                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-text-s">Orari</p>
-              </div>
+            <div>
+              <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Orari di Lavoro</p>
               <dl>
-                {hours.map(([d, h, closed]) => (
-                  <div key={d} className="flex justify-between items-center py-2 border-b border-border last:border-0">
-                    <dt className="text-text-s text-sm">{d}</dt>
-                    <dd className={`text-sm font-semibold ${closed ? 'text-text-xs' : 'text-text-p'}`}>{h}</dd>
+                {[
+                  ['Lunedì – Venerdì', '8:00 – 18:00', false],
+                  ['Sabato',           '8:00 – 12:00', false],
+                  ['Domenica',         'Chiuso',        true ],
+                ].map(([d, h, closed]) => (
+                  <div key={d} className="flex justify-between items-center py-3.5 border-b border-white/8 last:border-0">
+                    <dt className="text-white/50 text-sm">{d}</dt>
+                    <dd className={`text-sm font-semibold tabular-nums ${closed ? 'text-white/25' : 'text-white/80'}`}>{h}</dd>
                   </div>
                 ))}
               </dl>
@@ -127,20 +121,19 @@ export default function Contact() {
           {/* ── Right: form ── */}
           <motion.div
             initial={{ opacity: 0, x: 20 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.65, delay: 0.15 }}
-            className="lg:col-span-3">
+            transition={{ duration: 0.7, delay: 0.15 }}>
 
-            <div className="card p-6 md:p-9">
+            <div className="border border-white/10 rounded-2xl p-7 md:p-10"
+              style={{ background: 'rgba(255,255,255,0.04)' }}>
               {sent ? (
-                /* Success state */
-                <div className="flex flex-col items-center gap-5 py-16 text-center" role="alert" aria-live="polite">
-                  <div className="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center"
-                    style={{ border: '2px solid rgba(16,185,129,0.25)' }}>
-                    <CheckCircle size={30} className="text-emerald-500" aria-hidden="true"/>
+                <div className="flex flex-col items-center gap-5 py-16 text-center"
+                  role="alert" aria-live="polite">
+                  <div className="w-16 h-16 rounded-full border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-center">
+                    <CheckCircle size={30} className="text-emerald-400" aria-hidden="true"/>
                   </div>
                   <div>
-                    <h3 className="font-display font-700 text-text-p text-xl mb-2">Ottimo!</h3>
-                    <p className="text-text-s text-sm leading-relaxed max-w-xs mx-auto">
+                    <h3 className="font-display font-700 text-white text-xl mb-2">Ottimo!</h3>
+                    <p className="text-white/50 text-sm leading-relaxed max-w-xs mx-auto">
                       Si è aperta la tua app email. Invia il messaggio per completare la richiesta di preventivo.
                     </p>
                   </div>
@@ -165,7 +158,7 @@ export default function Contact() {
                         <input
                           id={`${uid}-phone`}
                           type="tel" name="phone" value={form.phone} onChange={set}
-                          placeholder="Il tuo numero di telefono"
+                          placeholder="Numero di telefono"
                           className={inputCls} autoComplete="tel"/>
                       </Field>
                     </div>
@@ -192,9 +185,9 @@ export default function Contact() {
                       <Send size={15} aria-hidden="true"/>
                     </button>
 
-                    <p className="text-text-xs text-xs text-center leading-relaxed">
+                    <p className="text-white/25 text-xs text-center leading-relaxed">
                       Dati protetti ai sensi del GDPR.{' '}
-                      <a href="/privacy" className="underline hover:text-accent transition-colors">
+                      <a href="/privacy" className="underline hover:text-white/50 transition-colors">
                         Privacy Policy
                       </a>
                     </p>
