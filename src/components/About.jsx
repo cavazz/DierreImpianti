@@ -50,7 +50,7 @@ export default function About() {
             <div className="mb-10" aria-hidden="true">
               <span
                 className="font-display font-black leading-none select-none"
-                style={{ fontSize: 'clamp(7rem, 18vw, 13rem)', color: '#F97316', letterSpacing: '-0.06em', lineHeight: 0.85 }}>
+                style={{ fontSize: 'clamp(7rem, 18vw, 13rem)', color: '#f59e0b', letterSpacing: '-0.06em', lineHeight: 0.85 }}>
                 20
               </span>
               <p className="text-text-s text-sm font-medium tracking-wide mt-3">

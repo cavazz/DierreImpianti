@@ -15,8 +15,8 @@
   }
 
   body {
-    background: #FFFFFF;
-    color: #111111;
+    background: #080808;
+    color: #f0f0f0;
     font-family: 'Open Sans', system-ui, sans-serif;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -27,21 +27,20 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', system-ui, sans-serif;
     line-height: 1.1;
-    color: #111111;
+    color: #f0f0f0;
   }
 
   #root { width: 100%; }
 
   :focus-visible {
-    outline: 2px solid #F97316;
+    outline: 2px solid #f59e0b;
     outline-offset: 3px;
     border-radius: 3px;
   }
 
-  /* Skip link */
   .skip-link {
     position: absolute; top: -100%; left: 1rem;
-    background: #F97316; color: white;
+    background: #f59e0b; color: #080808;
     padding: 0.75rem 1.5rem; border-radius: 0 0 8px 8px;
     font-weight: 700; z-index: 9999;
     transition: top 0.15s;
@@ -51,61 +50,71 @@
 
 /* ── Utilities ─────────────────────────────────────── */
 @layer utilities {
-  /* Layout */
   .container-xl    { @apply max-w-7xl mx-auto px-5 md:px-12 lg:px-20; }
   .section-pad     { @apply py-24 md:py-32; }
   .section-pad-sm  { @apply py-16 md:py-20; }
 
-  /* Labels */
   .label {
     font-family: 'Open Sans', sans-serif;
     font-size: 0.6875rem; font-weight: 700;
     letter-spacing: 0.22em; text-transform: uppercase;
-    color: #F97316; display: block; margin-bottom: 1.25rem;
+    color: #f59e0b; display: block; margin-bottom: 1.25rem;
   }
   .label-dark {
     font-family: 'Open Sans', sans-serif;
     font-size: 0.6875rem; font-weight: 700;
     letter-spacing: 0.22em; text-transform: uppercase;
-    color: rgba(249,115,22,0.75); display: block; margin-bottom: 1.25rem;
+    color: rgba(245,158,11,0.8); display: block; margin-bottom: 1.25rem;
+  }
+  .section-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.6875rem; font-weight: 700;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: #f59e0b; display: block; margin-bottom: 1.25rem;
+    text-align: center;
   }
 
-  /* Dividers */
-  .divider      { height: 1px; background: #E5E5E5; }
-  .divider-dark { height: 1px; background: rgba(255,255,255,0.1); }
+  .divider      { height: 1px; background: #1e1e1e; }
+  .divider-dark { height: 1px; background: rgba(255,255,255,0.07); }
 
   /* Buttons */
   .btn-primary {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.9rem;
-    color: #ffffff; background: #F97316; border: none;
+    color: #080808; background: #f59e0b; border: none;
     border-radius: 6px; padding: 0.875rem 2rem;
     cursor: pointer; min-height: 52px; white-space: nowrap;
     transition: background 0.2s, transform 0.15s;
     letter-spacing: 0.01em;
   }
-  .btn-primary:hover  { background: #EA580C; transform: translateY(-1px); }
+  .btn-primary:hover  { background: #d97706; transform: translateY(-1px); }
   .btn-primary:active { transform: translateY(0); }
 
   .btn-outline-dark {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem;
-    color: #111111; background: transparent;
-    border: 1.5px solid #E5E5E5; border-radius: 6px;
+    color: #f0f0f0; background: transparent;
+    border: 1.5px solid #2b2b2b; border-radius: 6px;
     padding: 0.875rem 2rem; cursor: pointer; min-height: 52px; white-space: nowrap;
-    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
   }
-  .btn-outline-dark:hover  { border-color: #111111; background: #F7F7F5; transform: translateY(-1px); }
+  .btn-outline-dark:hover {
+    border-color: #f59e0b; background: rgba(245,158,11,0.06);
+    color: #f59e0b; transform: translateY(-1px);
+  }
 
   .btn-ghost-light {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
     font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem;
-    color: rgba(255,255,255,0.75); background: rgba(255,255,255,0.07);
-    border: 1.5px solid rgba(255,255,255,0.18); border-radius: 6px;
+    color: rgba(240,240,240,0.7); background: rgba(255,255,255,0.05);
+    border: 1.5px solid rgba(255,255,255,0.12); border-radius: 6px;
     padding: 0.875rem 2rem; cursor: pointer; min-height: 52px; white-space: nowrap;
     transition: all 0.2s;
   }
-  .btn-ghost-light:hover { color: #fff; background: rgba(255,255,255,0.13); border-color: rgba(255,255,255,0.35); transform: translateY(-1px); }
+  .btn-ghost-light:hover {
+    color: #f0f0f0; background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.22); transform: translateY(-1px);
+  }
 }
 
 /* ── Ticker ────────────────────────────────────────── */
@@ -127,8 +136,8 @@
 }
 
 /* ── Scrollbar ─────────────────────────────────────── */
-::selection { background: rgba(249,115,22,0.15); color: #111; }
+::selection { background: rgba(245,158,11,0.2); color: #f0f0f0; }
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #fff; }
-::-webkit-scrollbar-thumb { background: #E5E5E5; border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: #F97316; }
+::-webkit-scrollbar-track { background: #080808; }
+::-webkit-scrollbar-thumb { background: #2b2b2b; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #f59e0b; }

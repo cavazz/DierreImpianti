@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Phone } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const links = [
@@ -8,6 +8,32 @@ const links = [
   { label: 'Chi Siamo', href: '#chi-siamo' },
   { label: 'Contatti',  href: '#contatti' },
 ]
+
+/* Hamburger animato — 3 linee che diventano X */
+function Burger({ open, onClick }) {
+  return (
+    <motion.button
+      onClick={onClick}
+      whileTap={{ scale: 0.88 }}
+      aria-label={open ? 'Chiudi menu' : 'Apri menu'}
+      aria-expanded={open}
+      className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-lg z-[60]"
+      style={{ color: open ? '#f59e0b' : 'rgba(240,240,240,0.75)' }}>
+      <motion.span
+        animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.28, ease: [0.76, 0, 0.24, 1] }}
+        className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
+      <motion.span
+        animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.18 }}
+        className="block w-5 h-[1.5px] bg-current rounded-full"/>
+      <motion.span
+        animate={open ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
+        transition={{ duration: 0.28, ease: [0.76, 0, 0.24, 1] }}
+        className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
+    </motion.button>
+  )
+}
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
@@ -36,124 +62,149 @@ export default function Navbar() {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }, [isHome, navigate])
 
-  const solid = scrolled || open
-
   return (
     <>
       <a href="#main-content" className="skip-link">Vai al contenuto</a>
 
+      {/* ── Header fisso ── */}
       <motion.header
-        initial={{ y: -16, opacity: 0 }}
+        initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.45, ease: 'easeOut' }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-          solid
-            ? 'bg-white/96 backdrop-blur-md border-b border-border'
-            : 'bg-transparent'
-        }`}>
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-400 ${
+          scrolled
+            ? 'border-b border-white/6'
+            : ''
+        }`}
+        style={scrolled ? { background: 'rgba(8,8,8,0.92)', backdropFilter: 'blur(16px)' } : {}}>
 
-        <nav className="max-w-7xl mx-auto px-5 md:px-12 lg:px-20 flex items-center justify-between h-[60px] md:h-[64px]"
+        <nav
+          className="max-w-7xl mx-auto px-5 md:px-12 lg:px-20 flex items-center justify-between h-[60px] md:h-[64px]"
           aria-label="Navigazione principale">
 
           {/* Logo */}
-          <button
+          <motion.button
             onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            className="flex items-center gap-3 group"
-            aria-label="Dierre Impianti – home">
-            <span className="w-8 h-8 rounded-md flex items-center justify-center bg-accent flex-shrink-0 transition-transform duration-200 group-hover:scale-105"
+            className="flex items-center gap-2.5 group"
+            aria-label="Dierre Impianti – home"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}>
+            <span
+              className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 transition-shadow duration-300 group-hover:shadow-[0_0_12px_rgba(245,158,11,0.5)]"
+              style={{ background: '#f59e0b' }}
               aria-hidden="true">
-              <span className="text-white font-display font-black text-xs tracking-tighter">DR</span>
+              <span className="text-dark font-display font-black text-xs tracking-tighter">DR</span>
             </span>
-            <span className={`font-display font-700 text-[0.875rem] tracking-tight transition-colors duration-300 ${solid ? 'text-text-p' : 'text-white'}`}>
+            <span className="font-display font-700 text-[0.875rem] tracking-tight text-text-p">
               Dierre Impianti
             </span>
-          </button>
+          </motion.button>
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-8" role="list">
             {links.map(l => (
-              <li key={l.label}>
+              <li key={l.label} className="relative group">
                 <button
                   onClick={() => go(l.href)}
-                  className={`text-[0.8125rem] font-semibold transition-colors duration-200 hover:text-accent ${
-                    solid ? 'text-text-s' : 'text-white/60'
-                  }`}>
+                  className="text-[0.8125rem] font-semibold text-text-s hover:text-text-p transition-colors duration-200 py-1">
                   {l.label}
                 </button>
+                {/* Animated underline */}
+                <span className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-px bg-accent transition-all duration-300 ease-out"/>
               </li>
             ))}
           </ul>
 
-          {/* CTA */}
+          {/* CTA + Burger */}
           <div className="flex items-center gap-3">
-            <button
+            <motion.button
               onClick={() => go('#contatti')}
-              className={`hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.8125rem] px-4 py-2.5 rounded-md transition-all duration-200 ${
-                solid
-                  ? 'bg-accent text-white hover:bg-accent-h'
-                  : 'bg-white text-accent hover:bg-white/90'
-              }`}>
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.8125rem] px-4 py-2.5 rounded-md transition-all duration-200 bg-accent text-dark hover:bg-accent-h">
               Preventivo Gratuito
               <ArrowUpRight size={14} aria-hidden="true"/>
-            </button>
+            </motion.button>
 
-            <button
-              onClick={() => setOpen(o => !o)}
-              aria-label={open ? 'Chiudi menu' : 'Apri menu'}
-              aria-expanded={open}
-              className={`md:hidden w-9 h-9 flex items-center justify-center rounded-md border transition-all duration-200 ${
-                solid
-                  ? 'border-border text-text-s hover:text-text-p hover:bg-surface'
-                  : 'border-white/20 text-white/70 hover:text-white hover:bg-white/10'
-              }`}>
-              {open ? <X size={17}/> : <Menu size={17}/>}
-            </button>
+            <Burger open={open} onClick={() => setOpen(o => !o)}/>
           </div>
         </nav>
       </motion.header>
 
-      {/* Mobile menu */}
+      {/* ── Mobile menu — full-screen con reveal circolare ── */}
       <AnimatePresence>
         {open && (
-          <>
-            <motion.div
-              key="bg"
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-black/25 md:hidden"
-              onClick={() => setOpen(false)}/>
-            <motion.div
-              key="panel"
-              role="dialog" aria-label="Menu mobile" aria-modal="true"
-              initial={{ x: '100%' }} animate={{ x: 0 }} exit={{ x: '100%' }}
-              transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-              className="fixed top-0 right-0 bottom-0 z-50 w-72 bg-white md:hidden flex flex-col"
-              style={{ boxShadow: '-4px 0 32px rgba(0,0,0,0.1)' }}>
+          <motion.div
+            key="fullscreen"
+            role="dialog"
+            aria-label="Menu mobile"
+            aria-modal="true"
+            initial={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
+            animate={{ clipPath: 'circle(200% at calc(100% - 40px) 30px)' }}
+            exit={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
+            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 z-50 flex flex-col md:hidden overflow-hidden"
+            style={{ background: '#080808' }}>
 
-              <div className="flex items-center justify-between px-6 h-[60px] border-b border-border">
-                <span className="font-display font-700 text-[0.875rem] text-text-p">Menu</span>
-                <button onClick={() => setOpen(false)} aria-label="Chiudi"
-                  className="w-8 h-8 flex items-center justify-center rounded-md text-text-s hover:bg-surface hover:text-text-p transition-all">
-                  <X size={17}/>
-                </button>
+            {/* Amber glow superiore */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse 80% 40% at 50% -10%, rgba(245,158,11,0.09) 0%, transparent 70%)' }}/>
+
+            {/* Top bar con logo + bottone chiudi */}
+            <div className="flex items-center justify-between px-5 h-[60px] border-b border-white/5 relative z-10 flex-shrink-0">
+              <div className="flex items-center gap-2.5">
+                <span className="w-7 h-7 rounded flex items-center justify-center flex-shrink-0"
+                  style={{ background: '#f59e0b' }} aria-hidden="true">
+                  <span className="text-dark font-display font-black text-[9px]">DR</span>
+                </span>
+                <span className="font-display font-700 text-text-p text-sm">Dierre Impianti</span>
               </div>
+              <Burger open={open} onClick={() => setOpen(false)}/>
+            </div>
 
-              <nav className="flex-1 flex flex-col px-4 py-4 gap-0.5">
-                {links.map(l => (
-                  <button key={l.label} onClick={() => go(l.href)}
-                    className="text-left px-4 py-3.5 rounded-md text-text-p font-semibold text-base hover:bg-surface hover:text-accent transition-all duration-150">
+            {/* Links — centrati verticalmente, grandi, con prefisso numerico */}
+            <nav className="flex-1 flex flex-col justify-center px-7 gap-0 relative z-10" aria-label="Menu principale">
+              {links.map((l, i) => (
+                <motion.button
+                  key={l.label}
+                  onClick={() => go(l.href)}
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.07 + 0.2, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="group flex items-baseline gap-4 py-5 text-left w-full border-b border-white/5 last:border-0">
+                  <span className="text-[10px] font-mono font-bold tracking-widest text-text-xs group-hover:text-accent transition-colors duration-200 flex-shrink-0 w-5">
+                    0{i + 1}
+                  </span>
+                  <span
+                    className="font-display font-black text-white/25 group-hover:text-white transition-colors duration-250"
+                    style={{ fontSize: 'clamp(1.9rem, 7vw, 2.6rem)', letterSpacing: '-0.03em' }}>
                     {l.label}
-                  </button>
-                ))}
-              </nav>
+                  </span>
+                </motion.button>
+              ))}
+            </nav>
 
-              <div className="px-5 pb-8 pt-4 border-t border-border">
-                <button onClick={() => go('#contatti')}
-                  className="btn-primary w-full">
-                  Richiedi Preventivo Gratuito
-                </button>
-              </div>
+            {/* Bottom — CTA + telefono */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.42, duration: 0.38, ease: 'easeOut' }}
+              className="px-7 pt-5 pb-8 border-t border-white/5 relative z-10 flex-shrink-0 space-y-3">
+              <button
+                onClick={() => go('#contatti')}
+                className="btn-primary w-full">
+                Preventivo Gratuito
+              </button>
+              <a
+                href="tel:+393473177613"
+                className="flex items-center justify-center gap-2 text-text-s hover:text-accent transition-colors duration-200 text-sm font-medium py-1">
+                <Phone size={13} aria-hidden="true"/>
+                +39 347 317 7613
+              </a>
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
     </>
