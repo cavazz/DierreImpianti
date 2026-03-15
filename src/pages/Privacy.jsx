@@ -8,7 +8,7 @@ const S = ({ title, children }) => (
     <div className="text-text-s text-[0.9375rem] leading-relaxed space-y-3">{children}</div>
   </section>
 )
-const A = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-electric underline transition-colors">{children}</a>
+const A = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-h underline transition-colors">{children}</a>
 const B = ({ children }) => <strong className="text-text-p font-medium">{children}</strong>
 
 export default function Privacy() {
@@ -21,18 +21,18 @@ export default function Privacy() {
           <ArrowLeft size={15}/> Torna alla home
         </Link>
         <header className="mb-12">
-          <p className="text-electric text-[11px] font-semibold tracking-[0.2em] uppercase mb-3">Informativa</p>
+          <p className="label mb-3">Informativa</p>
           <h1 className="text-text-p text-4xl md:text-5xl font-bold tracking-tight mb-4">Privacy Policy</h1>
           <p className="text-text-s text-sm">Ultimo aggiornamento: 13 marzo 2026 · Versione 1.0</p>
         </header>
 
-        <div className="border-t border-[#0099ff]/12 pt-10">
+        <div className="border-t border-white/6 pt-10">
           <S title="1. Titolare del Trattamento">
             <p>Il Titolare del trattamento è:<br/>
               <B>Dierre Impianti di Dainese Roberto</B><br/>
               Via Madonna Della Mercede 6, 35028 Piove di Sacco (PD)<br/>
-              Tel: <a href="tel:3473177613" className="text-accent hover:text-electric underline">347.317.7613</a><br/>
-              Email: <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-electric underline">info@dierreimpianti.it</a><br/>
+              Tel: <a href="tel:3473177613" className="text-accent hover:text-accent-h underline">347.317.7613</a><br/>
+              Email: <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-accent-h underline">info@dierreimpianti.it</a><br/>
               Sito web: <A href="https://www.dierreimpianti.it">www.dierreimpianti.it</A>
             </p>
           </S>
@@ -49,10 +49,10 @@ export default function Privacy() {
           </S>
 
           <S title="3. Finalità e Base Giuridica">
-            <div className="overflow-x-auto rounded-xl e-border e-bg p-4">
+            <div className="overflow-x-auto rounded-xl p-4" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.025)' }}>
               <table className="w-full text-sm border-collapse">
                 <thead>
-                  <tr className="border-b border-[#0099ff]/10">
+                  <tr className="border-b border-white/6">
                     <th className="text-left py-2 pr-4 text-text-p font-medium">Finalità</th>
                     <th className="text-left py-2 pr-4 text-text-p font-medium">Base Giuridica</th>
                     <th className="text-left py-2 text-text-p font-medium">Conservazione</th>
@@ -65,7 +65,7 @@ export default function Privacy() {
                     ['Cookie tecnici/preferenze','Interesse legittimo','Sessione / 12 mesi'],
                     ['Cookie analitici (opzionale)','Consenso (art. 6.1.a GDPR)','26 mesi'],
                   ].map(([f,b,c]) => (
-                    <tr key={f} className="border-b border-[#0099ff]/6">
+                    <tr key={f} className="border-b border-white/5">
                       <td className="py-2.5 pr-4">{f}</td>
                       <td className="py-2.5 pr-4">{b}</td>
                       <td className="py-2.5">{c}</td>
@@ -92,7 +92,7 @@ export default function Privacy() {
               <li><B>Opposizione</B> — opporti al trattamento per interesse legittimo (art. 21)</li>
               <li><B>Revoca del consenso</B> — in qualsiasi momento, senza pregiudicare la liceità del trattamento pregresso</li>
             </ul>
-            <p>Per esercitare i tuoi diritti scrivi a <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-electric underline">info@dierreimpianti.it</a>. Risponderemo entro 30 giorni.</p>
+            <p>Per esercitare i tuoi diritti scrivi a <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-accent-h underline">info@dierreimpianti.it</a>. Risponderemo entro 30 giorni.</p>
             <p>Hai inoltre il diritto di proporre reclamo al <A href="https://www.garanteprivacy.it">Garante per la Protezione dei Dati Personali</A>.</p>
           </S>
 

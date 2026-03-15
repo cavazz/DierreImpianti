@@ -31,13 +31,13 @@ export default function Stats() {
     <section ref={ref} className="py-20 md:py-28 px-5 md:px-12 bg-bg relative" aria-label="Numeri aziendali">
       {/* Dividers */}
       <div className="absolute inset-x-0 top-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.15), transparent)' }}/>
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(56,189,248,0.15), transparent)' }}/>
       <div className="absolute inset-x-0 bottom-0 h-px"
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(245,158,11,0.15), transparent)' }}/>
+        style={{ background: 'linear-gradient(90deg, transparent, rgba(56,189,248,0.15), transparent)' }}/>
 
       {/* Glow */}
       <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 70%)' }}/>
+        style={{ background: 'radial-gradient(ellipse 70% 50% at 50% 50%, rgba(56,189,248,0.04) 0%, transparent 70%)' }}/>
 
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -51,13 +51,13 @@ export default function Stats() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.1 }}
               className="relative text-center rounded-2xl p-6 md:p-8 group transition-all duration-300"
-              style={{ border: '1px solid rgba(245,158,11,0.1)', background: 'rgba(245,158,11,0.025)' }}>
+              style={{ border: '1px solid rgba(56,189,248,0.1)', background: 'rgba(56,189,248,0.025)' }}>
 
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                style={{ background: 'radial-gradient(ellipse at center, rgba(245,158,11,0.07) 0%, transparent 70%)' }}/>
+                style={{ background: 'radial-gradient(ellipse at center, rgba(56,189,248,0.07) 0%, transparent 70%)' }}/>
 
-              <p className="font-black text-text-p tracking-[-0.05em] mb-1 tabular-nums relative"
-                style={{ fontSize: 'clamp(2.5rem,5.5vw,4.25rem)', textShadow: '0 0 24px rgba(245,158,11,0.25)' }}>
+              <p className="font-black tracking-[-0.05em] mb-1 tabular-nums relative gradient-text"
+                style={{ fontSize: 'clamp(2.5rem,5.5vw,4.25rem)', filter: 'drop-shadow(0 0 12px rgba(56,189,248,0.3))' }}>
                 <Counter value={s.v} suffix={s.s} inView={inView}/>
               </p>
               <p className="text-text-p text-sm font-semibold mb-1 relative">{s.label}</p>

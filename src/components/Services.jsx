@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { Zap, Sun, Radio, Home, Wind, Network, Settings2, ShieldCheck, Flame, CloudLightning, Plus, Minus, ArrowUpRight } from 'lucide-react'
 
 const services = [
@@ -42,10 +43,11 @@ function Ticker() {
 
 /* Accordion row */
 function Row({ s, index, active, setActive }) {
-  const isOpen  = active === index
-  const Icon    = s.icon
-  const ref     = useRef(null)
-  const inView  = useInView(ref, { once: true, margin: '-40px' })
+  const isOpen   = active === index
+  const Icon     = s.icon
+  const ref      = useRef(null)
+  const inView   = useInView(ref, { once: true, margin: '-40px' })
+  const navigate = useNavigate()
 
   return (
     <motion.div
@@ -105,7 +107,7 @@ function Row({ s, index, active, setActive }) {
             <div className="pb-7 pl-[calc(1rem+36px+2rem)] md:pl-[calc(2rem+36px+2rem)] lg:pl-[calc(5rem+36px+2rem)] pr-14">
               <p className="text-text-s leading-relaxed mb-5" style={{ fontSize: '0.9375rem' }}>{s.desc}</p>
               <button
-                onClick={() => document.querySelector('#contatti')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => { navigate('/contatti'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
                 className="inline-flex items-center gap-1.5 text-accent hover:text-accent-h font-display font-700 text-[0.875rem] transition-colors">
                 Richiedi informazioni
                 <ArrowUpRight size={14} aria-hidden="true"/>

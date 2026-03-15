@@ -38,17 +38,17 @@ export default function Accessibilita() {
           <ArrowLeft size={15}/> Torna alla home
         </Link>
         <header className="mb-12">
-          <p className="text-electric text-[11px] font-semibold tracking-[0.2em] uppercase mb-3">Dichiarazione</p>
+          <p className="label mb-3">Dichiarazione</p>
           <h1 className="text-text-p text-4xl md:text-5xl font-bold tracking-tight mb-4">Accessibilità</h1>
           <p className="text-text-s text-sm">
             <strong className="text-text-p">Dierre Impianti di Dainese Roberto</strong> ·
             Via Madonna Della Mercede 6, 35028 Piove di Sacco (PD) ·{' '}
-            <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-electric underline">info@dierreimpianti.it</a>
+            <a href="mailto:info@dierreimpianti.it" className="text-accent hover:text-accent-h underline">info@dierreimpianti.it</a>
           </p>
           <p className="text-text-s text-sm mt-1">Ultimo aggiornamento: 13 marzo 2026</p>
         </header>
 
-        <div className="border-t border-[#0099ff]/12 pt-10">
+        <div className="border-t border-white/6 pt-10">
           <S title="Stato di conformità">
             <p>Il sito web <strong className="text-text-p">www.dierreimpianti.it</strong> è <strong className="text-text-p">parzialmente conforme</strong> alle Web Content Accessibility Guidelines (WCAG) 2.1 Livello AA. Le non conformità note sono elencate di seguito.</p>
           </S>
@@ -68,7 +68,7 @@ export default function Accessibilita() {
             <ul className="space-y-2.5">
               {limits.map(t => (
                 <li key={t} className="flex items-start gap-2.5">
-                  <AlertCircle size={15} className="text-amber-400 flex-shrink-0 mt-0.5"/>
+                  <AlertCircle size={15} className="text-accent flex-shrink-0 mt-0.5"/>
                   <span>{t}</span>
                 </li>
               ))}
@@ -82,7 +82,7 @@ export default function Accessibilita() {
           <S title="Segnalazione problemi">
             <p>Se riscontri un problema di accessibilità scrivici: descrivici l'ostacolo incontrato e risponderemo entro 5 giorni lavorativi.</p>
             <a href="mailto:info@dierreimpianti.it?subject=Segnalazione%20accessibilit%C3%A0"
-              className="inline-flex items-center gap-2.5 mt-2 px-5 py-3 rounded-xl e-border e-bg text-accent text-sm font-medium hover:border-[#0099ff]/30 transition-all duration-200">
+              className="inline-flex items-center gap-2.5 mt-2 px-5 py-3 rounded-xl text-accent text-sm font-medium transition-all duration-200" style={{ border: '1px solid rgba(56,189,248,0.2)', background: 'rgba(56,189,248,0.05)' }}>
               <Mail size={15}/> info@dierreimpianti.it
             </a>
           </S>

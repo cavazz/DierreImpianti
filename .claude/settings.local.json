@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:www.dierreimpianti.it)",
       "Read(//c/Users/caval/.claude/plugins/cache/ui-ux-pro-max-skill/ui-ux-pro-max/2.0.1/.claude/skills/ui-ux-pro-max/**)",
-      "Bash(python scripts/search.py \"electrical contractor construction trade professional service Italy\" --design-system -p \"Dierre Impianti\" -f markdown)"
+      "Bash(python scripts/search.py \"electrical contractor construction trade professional service Italy\" --design-system -p \"Dierre Impianti\" -f markdown)",
+      "Bash(npm run:*)"
     ]
   }
 }

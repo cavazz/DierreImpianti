@@ -11,7 +11,7 @@ import Cookie from './pages/Cookie'
 import Accessibilita from './pages/Accessibilita'
 
 function HomePage() {
-  return (<><Hero /><Services /><About /><Contact /></>)
+  return <><Hero /><Services /></>
 }
 
 export default function App() {
@@ -20,9 +20,11 @@ export default function App() {
       <Navbar />
       <main id="main-content" tabIndex={-1}>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/cookie" element={<Cookie />} />
+          <Route path="/"            element={<HomePage />} />
+          <Route path="/chi-siamo"   element={<About />} />
+          <Route path="/contatti"    element={<Contact />} />
+          <Route path="/privacy"     element={<Privacy />} />
+          <Route path="/cookie"      element={<Cookie />} />
           <Route path="/accessibilita" element={<Accessibilita />} />
         </Routes>
       </main>

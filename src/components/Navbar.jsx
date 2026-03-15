@@ -1,35 +1,75 @@
-import { useState, useEffect, useCallback } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { motion, AnimatePresence, useAnimation } from 'framer-motion'
 import { ArrowUpRight, Phone } from 'lucide-react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import LogoImage from './LogoImage'
 
 const links = [
-  { label: 'Servizi',   href: '#servizi' },
-  { label: 'Chi Siamo', href: '#chi-siamo' },
-  { label: 'Contatti',  href: '#contatti' },
+  { label: 'Servizi',   href: '#servizi',   type: 'scroll' },
+  { label: 'Chi Siamo', href: '/chi-siamo', type: 'route'  },
+  { label: 'Contatti',  href: '/contatti',  type: 'route'  },
 ]
 
-/* Hamburger animato — 3 linee che diventano X */
+/* Hamburger animato — keyframe "whip" quando torna al menu */
 function Burger({ open, onClick }) {
+  const btnCtrl = useAnimation()
+  const ln1Ctrl = useAnimation()
+  const ln2Ctrl = useAnimation()
+  const ln3Ctrl = useAnimation()
+  const mounted = useRef(false)
+
+  useEffect(() => {
+    // Salta il primo render: il componente parte già nello stato hamburger
+    if (!mounted.current) { mounted.current = true; return }
+
+    if (open) {
+      /* ── Hamburger → X : preciso e deciso ── */
+      ln1Ctrl.start({ rotate: 45,  y:  7, transition: { duration: 0.48, ease: [0.76, 0, 0.24, 1] } })
+      ln2Ctrl.start({ opacity: 0, scaleX: 0, transition: { duration: 0.22 } })
+      ln3Ctrl.start({ rotate: -45, y: -7, transition: { duration: 0.48, ease: [0.76, 0, 0.24, 1] } })
+    } else {
+      /* ── X → Hamburger : riallineamento orizzontale fluido ── */
+
+      // Le due sbarre diagonali ruotano dolcemente a 0°
+      // con una leggera inerzia spring per naturalezza
+      const springBack = { type: 'spring', stiffness: 210, damping: 24, mass: 0.9 }
+
+      ln1Ctrl.start({ rotate: 0, y: 0, transition: springBack })
+      ln3Ctrl.start({ rotate: 0, y: 0, transition: springBack })
+
+      // La barra centrale riappare con un fade fluido, leggermente in ritardo
+      // così sembra che "emerga" dopo che le altre due si sono aperte
+      ln2Ctrl.start({
+        opacity: 1,
+        scaleX:  1,
+        transition: { duration: 0.28, delay: 0.14, ease: [0.25, 0.46, 0.45, 0.94] },
+      })
+
+      // Reset scala bottone senza animazione
+      btnCtrl.start({ scale: 1, transition: { duration: 0 } })
+    }
+  }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <motion.button
       onClick={onClick}
+      animate={btnCtrl}
       whileTap={{ scale: 0.88 }}
       aria-label={open ? 'Chiudi menu' : 'Apri menu'}
       aria-expanded={open}
       className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-lg z-[60]"
-      style={{ color: open ? '#f59e0b' : 'rgba(240,240,240,0.75)' }}>
+      style={{ color: open ? '#38bdf8' : 'rgba(240,244,248,0.75)' }}>
       <motion.span
-        animate={open ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }}
-        transition={{ duration: 0.28, ease: [0.76, 0, 0.24, 1] }}
+        animate={ln1Ctrl}
+        initial={{ rotate: 0, y: 0 }}
         className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
       <motion.span
-        animate={open ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-        transition={{ duration: 0.18 }}
+        animate={ln2Ctrl}
+        initial={{ opacity: 1, scaleX: 1 }}
         className="block w-5 h-[1.5px] bg-current rounded-full"/>
       <motion.span
-        animate={open ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }}
-        transition={{ duration: 0.28, ease: [0.76, 0, 0.24, 1] }}
+        animate={ln3Ctrl}
+        initial={{ rotate: 0, y: 0 }}
         className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
     </motion.button>
   )
@@ -52,8 +92,13 @@ export default function Navbar() {
   useEffect(() => { setOpen(false) }, [location])
   useEffect(() => { document.body.style.overflow = open ? 'hidden' : '' }, [open])
 
-  const go = useCallback(href => {
+  const go = useCallback((href, type = 'scroll') => {
     setOpen(false)
+    if (type === 'route') {
+      navigate(href)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
     if (!isHome) {
       navigate('/')
       setTimeout(() => document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' }), 150)
@@ -76,36 +121,25 @@ export default function Navbar() {
             ? 'border-b border-white/6'
             : ''
         }`}
-        style={scrolled ? { background: 'rgba(8,8,8,0.92)', backdropFilter: 'blur(16px)' } : {}}>
+        style={scrolled ? { background: 'rgba(13,21,32,0.92)', backdropFilter: 'blur(16px)' } : {}}>
 
         <nav
           className="max-w-7xl mx-auto px-5 md:px-12 lg:px-20 flex items-center justify-between h-[60px] md:h-[64px]"
           aria-label="Navigazione principale">
 
           {/* Logo */}
-          <motion.button
+          <button
             onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
-            className="flex items-center gap-2.5 group"
-            aria-label="Dierre Impianti – home"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}>
-            <span
-              className="w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0 transition-shadow duration-300 group-hover:shadow-[0_0_12px_rgba(245,158,11,0.5)]"
-              style={{ background: '#f59e0b' }}
-              aria-hidden="true">
-              <span className="text-dark font-display font-black text-xs tracking-tighter">DR</span>
-            </span>
-            <span className="font-display font-700 text-[0.875rem] tracking-tight text-text-p">
-              Dierre Impianti
-            </span>
-          </motion.button>
+            aria-label="Dierre Impianti – home">
+            <LogoImage className="h-9" />
+          </button>
 
           {/* Desktop links */}
           <ul className="hidden md:flex items-center gap-8" role="list">
             {links.map(l => (
               <li key={l.label} className="relative group">
                 <button
-                  onClick={() => go(l.href)}
+                  onClick={() => go(l.href, l.type)}
                   className="text-[0.8125rem] font-semibold text-text-s hover:text-text-p transition-colors duration-200 py-1">
                   {l.label}
                 </button>
@@ -118,10 +152,11 @@ export default function Navbar() {
           {/* CTA + Burger */}
           <div className="flex items-center gap-3">
             <motion.button
-              onClick={() => go('#contatti')}
-              whileHover={{ scale: 1.03 }}
+              onClick={() => go('/contatti', 'route')}
+              whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
               whileTap={{ scale: 0.97 }}
-              className="hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.8125rem] px-4 py-2.5 rounded-md transition-all duration-200 bg-accent text-dark hover:bg-accent-h">
+              className="hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.8125rem] px-4 py-2.5 rounded-md text-dark"
+              style={{ background: 'linear-gradient(135deg, #f5c430 0%, #38bdf8 100%)', transition: 'filter 0.2s, transform 0.15s' }}>
               Preventivo Gratuito
               <ArrowUpRight size={14} aria-hidden="true"/>
             </motion.button>
@@ -142,24 +177,23 @@ export default function Navbar() {
             initial={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
             animate={{ clipPath: 'circle(200% at calc(100% - 40px) 30px)' }}
             exit={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
-            transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
+            transition={{
+              duration: 1.15,
+              ease: [0.76, 0, 0.24, 1],
+            }}
             className="fixed inset-0 z-50 flex flex-col md:hidden overflow-hidden"
-            style={{ background: '#080808' }}>
+            style={{ background: '#0d1520' }}>
 
             {/* Amber glow superiore */}
             <div
               aria-hidden="true"
               className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 80% 40% at 50% -10%, rgba(245,158,11,0.09) 0%, transparent 70%)' }}/>
+              style={{ background: 'radial-gradient(ellipse 80% 40% at 50% -10%, rgba(56,189,248,0.09) 0%, transparent 70%)' }}/>
 
             {/* Top bar con logo + bottone chiudi */}
             <div className="flex items-center justify-between px-5 h-[60px] border-b border-white/5 relative z-10 flex-shrink-0">
               <div className="flex items-center gap-2.5">
-                <span className="w-7 h-7 rounded flex items-center justify-center flex-shrink-0"
-                  style={{ background: '#f59e0b' }} aria-hidden="true">
-                  <span className="text-dark font-display font-black text-[9px]">DR</span>
-                </span>
-                <span className="font-display font-700 text-text-p text-sm">Dierre Impianti</span>
+                <LogoImage className="h-8" />
               </div>
               <Burger open={open} onClick={() => setOpen(false)}/>
             </div>
@@ -169,7 +203,7 @@ export default function Navbar() {
               {links.map((l, i) => (
                 <motion.button
                   key={l.label}
-                  onClick={() => go(l.href)}
+                  onClick={() => go(l.href, l.type)}
                   initial={{ opacity: 0, x: -24 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.07 + 0.2, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
@@ -178,7 +212,7 @@ export default function Navbar() {
                     0{i + 1}
                   </span>
                   <span
-                    className="font-display font-black text-white/25 group-hover:text-white transition-colors duration-250"
+                    className="font-display font-black text-white/25 group-hover:text-white transition-colors duration-[250ms]"
                     style={{ fontSize: 'clamp(1.9rem, 7vw, 2.6rem)', letterSpacing: '-0.03em' }}>
                     {l.label}
                   </span>
@@ -193,7 +227,7 @@ export default function Navbar() {
               transition={{ delay: 0.42, duration: 0.38, ease: 'easeOut' }}
               className="px-7 pt-5 pb-8 border-t border-white/5 relative z-10 flex-shrink-0 space-y-3">
               <button
-                onClick={() => go('#contatti')}
+                onClick={() => go('/contatti', 'route')}
                 className="btn-primary w-full">
                 Preventivo Gratuito
               </button>
