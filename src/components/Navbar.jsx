@@ -10,7 +10,7 @@ const links = [
   { label: 'Contatti',  href: '/contatti',  type: 'route'  },
 ]
 
-/* Hamburger animato — keyframe "whip" quando torna al menu */
+/* ── Hamburger ──────────────────────────────────────── */
 function Burger({ open, onClick }) {
   const btnCtrl = useAnimation()
   const ln1Ctrl = useAnimation()
@@ -19,33 +19,20 @@ function Burger({ open, onClick }) {
   const mounted = useRef(false)
 
   useEffect(() => {
-    // Salta il primo render: il componente parte già nello stato hamburger
     if (!mounted.current) { mounted.current = true; return }
 
     if (open) {
-      /* ── Hamburger → X : preciso e deciso ── */
       ln1Ctrl.start({ rotate: 45,  y:  7, transition: { duration: 0.48, ease: [0.76, 0, 0.24, 1] } })
       ln2Ctrl.start({ opacity: 0, scaleX: 0, transition: { duration: 0.22 } })
       ln3Ctrl.start({ rotate: -45, y: -7, transition: { duration: 0.48, ease: [0.76, 0, 0.24, 1] } })
     } else {
-      /* ── X → Hamburger : riallineamento orizzontale fluido ── */
-
-      // Le due sbarre diagonali ruotano dolcemente a 0°
-      // con una leggera inerzia spring per naturalezza
-      const springBack = { type: 'spring', stiffness: 210, damping: 24, mass: 0.9 }
-
-      ln1Ctrl.start({ rotate: 0, y: 0, transition: springBack })
-      ln3Ctrl.start({ rotate: 0, y: 0, transition: springBack })
-
-      // La barra centrale riappare con un fade fluido, leggermente in ritardo
-      // così sembra che "emerga" dopo che le altre due si sono aperte
+      const spring = { type: 'spring', stiffness: 210, damping: 24, mass: 0.9 }
+      ln1Ctrl.start({ rotate: 0, y: 0, transition: spring })
+      ln3Ctrl.start({ rotate: 0, y: 0, transition: spring })
       ln2Ctrl.start({
-        opacity: 1,
-        scaleX:  1,
+        opacity: 1, scaleX: 1,
         transition: { duration: 0.28, delay: 0.14, ease: [0.25, 0.46, 0.45, 0.94] },
       })
-
-      // Reset scala bottone senza animazione
       btnCtrl.start({ scale: 1, transition: { duration: 0 } })
     }
   }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -59,25 +46,20 @@ function Burger({ open, onClick }) {
       aria-expanded={open}
       className="md:hidden relative w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-lg z-[60]"
       style={{ color: open ? '#38bdf8' : 'rgba(240,244,248,0.75)' }}>
-      <motion.span
-        animate={ln1Ctrl}
-        initial={{ rotate: 0, y: 0 }}
+      <motion.span animate={ln1Ctrl} initial={{ rotate: 0, y: 0 }}
         className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
-      <motion.span
-        animate={ln2Ctrl}
-        initial={{ opacity: 1, scaleX: 1 }}
+      <motion.span animate={ln2Ctrl} initial={{ opacity: 1, scaleX: 1 }}
         className="block w-5 h-[1.5px] bg-current rounded-full"/>
-      <motion.span
-        animate={ln3Ctrl}
-        initial={{ rotate: 0, y: 0 }}
+      <motion.span animate={ln3Ctrl} initial={{ rotate: 0, y: 0 }}
         className="block w-5 h-[1.5px] bg-current rounded-full origin-center"/>
     </motion.button>
   )
 }
 
+/* ── Navbar ─────────────────────────────────────────── */
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen]         = useState(false)
+  const [open,     setOpen]     = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const isHome   = location.pathname === '/'
@@ -116,11 +98,7 @@ export default function Navbar() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className={`fixed top-0 inset-x-0 z-50 transition-all duration-400 ${
-          scrolled
-            ? 'border-b border-white/6'
-            : ''
-        }`}
+        className={`fixed top-0 inset-x-0 z-50 transition-all duration-400 ${scrolled ? 'border-b border-white/6' : ''}`}
         style={scrolled ? { background: 'rgba(13,21,32,0.92)', backdropFilter: 'blur(16px)' } : {}}>
 
         <nav
@@ -143,7 +121,6 @@ export default function Navbar() {
                   className="text-[0.875rem] font-semibold text-text-s hover:text-text-p transition-colors duration-200 py-1">
                   {l.label}
                 </button>
-                {/* Animated underline */}
                 <span className="absolute -bottom-0.5 left-0 w-0 group-hover:w-full h-px bg-accent transition-all duration-300 ease-out"/>
               </li>
             ))}
@@ -166,7 +143,7 @@ export default function Navbar() {
         </nav>
       </motion.header>
 
-      {/* ── Mobile menu — full-screen con reveal circolare ── */}
+      {/* ── Mobile fullscreen menu ── */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -176,64 +153,99 @@ export default function Navbar() {
             aria-modal="true"
             initial={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
             animate={{ clipPath: 'circle(200% at calc(100% - 40px) 30px)' }}
-            exit={{ clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
-            transition={{
-              duration: 1.15,
-              ease: [0.76, 0, 0.24, 1],
-            }}
+            exit={{    clipPath: 'circle(0px at calc(100% - 40px) 30px)' }}
+            transition={{ duration: 1.1, ease: [0.76, 0, 0.24, 1] }}
             className="fixed inset-0 z-50 flex flex-col md:hidden overflow-hidden"
             style={{ background: '#0d1520' }}>
 
-            {/* Amber glow superiore */}
-            <div
-              aria-hidden="true"
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse 80% 40% at 50% -10%, rgba(56,189,248,0.09) 0%, transparent 70%)' }}/>
+            {/* Top glow */}
+            <div aria-hidden="true" className="absolute inset-0 pointer-events-none" style={{
+              background: [
+                'radial-gradient(ellipse 80% 35% at 50% -5%,  rgba(56,189,248,0.08) 0%, transparent 70%)',
+                'radial-gradient(ellipse 60% 30% at 100% 110%, rgba(245,196,48,0.05) 0%, transparent 60%)',
+              ].join(', '),
+            }}/>
 
-            {/* Top bar con logo + bottone chiudi */}
+            {/* Decorative vertical line */}
+            <motion.div
+              aria-hidden="true"
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ delay: 0.5, duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+              className="absolute left-7 top-[72px] bottom-[130px] w-px origin-top pointer-events-none"
+              style={{ background: 'linear-gradient(180deg, rgba(56,189,248,0.18) 0%, rgba(245,196,48,0.08) 100%)' }}
+            />
+
+            {/* Top bar */}
             <div className="flex items-center justify-between px-5 h-[60px] border-b border-white/5 relative z-10 flex-shrink-0">
-              <div className="flex items-center gap-2.5">
-                <LogoImage className="h-8" />
-              </div>
+              <LogoImage className="h-8" />
               <Burger open={open} onClick={() => setOpen(false)}/>
             </div>
 
-            {/* Links — centrati verticalmente, grandi, con prefisso numerico */}
-            <nav className="flex-1 flex flex-col justify-center px-7 gap-0 relative z-10" aria-label="Menu principale">
+            {/* ── Nav links with mask-reveal ── */}
+            <nav
+              className="flex-1 flex flex-col justify-center px-7 relative z-10"
+              aria-label="Menu principale">
               {links.map((l, i) => (
-                <motion.button
+                <button
                   key={l.label}
                   onClick={() => go(l.href, l.type)}
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07 + 0.2, duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
-                  className="group flex items-baseline gap-4 py-5 text-left w-full border-b border-white/5 last:border-0">
-                  <span className="text-[10px] font-mono font-bold tracking-widest text-text-xs group-hover:text-accent transition-colors duration-200 flex-shrink-0 w-5">
-                    0{i + 1}
-                  </span>
-                  <span
-                    className="font-display font-black text-white/25 group-hover:text-white transition-colors duration-[250ms]"
-                    style={{ fontSize: 'clamp(1.9rem, 7vw, 2.6rem)', letterSpacing: '-0.03em' }}>
-                    {l.label}
-                  </span>
-                </motion.button>
+                  className="group flex items-center gap-5 py-5 text-left w-full
+                             border-b border-white/[0.06] last:border-0">
+
+                  {/* Number — mask reveal */}
+                  <div className="overflow-hidden flex-shrink-0 w-5">
+                    <motion.span
+                      initial={{ y: '130%' }}
+                      animate={{ y: '0%' }}
+                      transition={{ delay: 0.32 + i * 0.09, duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
+                      className="block text-[10px] font-mono font-bold tracking-widest
+                                 text-text-xs group-hover:text-accent transition-colors duration-200">
+                      0{i + 1}
+                    </motion.span>
+                  </div>
+
+                  {/* Title — mask reveal (core Lando animation) */}
+                  <div className="overflow-hidden flex-1" style={{ paddingBottom: '0.05em' }}>
+                    <motion.span
+                      initial={{ y: '100%' }}
+                      animate={{ y: '0%' }}
+                      transition={{ delay: 0.26 + i * 0.09, duration: 0.75, ease: [0.76, 0, 0.24, 1] }}
+                      className="block font-display font-black
+                                 text-white/20 group-hover:text-white transition-colors duration-[220ms]"
+                      style={{ fontSize: 'clamp(2rem, 8.5vw, 2.9rem)', letterSpacing: '-0.03em' }}>
+                      {l.label}
+                    </motion.span>
+                  </div>
+
+                  {/* Arrow — mask reveal */}
+                  <div className="overflow-hidden flex-shrink-0">
+                    <motion.div
+                      initial={{ y: '130%' }}
+                      animate={{ y: '0%' }}
+                      transition={{ delay: 0.55 + i * 0.09, duration: 0.42, ease: [0.25, 0.46, 0.45, 0.94] }}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-200
+                                 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                      <ArrowUpRight size={18} className="text-accent" aria-hidden="true"/>
+                    </motion.div>
+                  </div>
+                </button>
               ))}
             </nav>
 
-            {/* Bottom — CTA + telefono */}
+            {/* Bottom CTA */}
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.42, duration: 0.38, ease: 'easeOut' }}
+              transition={{ delay: 0.5, duration: 0.4, ease: 'easeOut' }}
               className="px-7 pt-5 pb-8 border-t border-white/5 relative z-10 flex-shrink-0 space-y-3">
-              <button
-                onClick={() => go('/contatti', 'route')}
-                className="btn-primary w-full">
+              <button onClick={() => go('/contatti', 'route')} className="btn-primary w-full">
                 Preventivo Gratuito
               </button>
               <a
                 href="tel:+393473177613"
-                className="flex items-center justify-center gap-2 text-text-s hover:text-accent transition-colors duration-200 text-sm font-medium py-1">
+                className="flex items-center justify-center gap-2 text-text-s
+                           hover:text-accent transition-colors duration-200 text-sm font-medium py-1">
                 <Phone size={13} aria-hidden="true"/>
                 +39 347 317 7613
               </a>
