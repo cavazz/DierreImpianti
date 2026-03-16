@@ -24,6 +24,10 @@
     overflow-x: hidden;
   }
 
+  /* Tutti gli elementi interattivi mostrano il cursore pointer */
+  button, a, [role="button"], [role="link"], label[for], select { cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: 0.55; }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', system-ui, sans-serif;
     line-height: 1.1;
@@ -100,8 +104,8 @@
     transition: filter 0.2s, transform 0.15s;
     letter-spacing: 0.01em;
   }
-  .btn-primary:hover  { filter: brightness(1.1); transform: translateY(-1px); }
-  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:hover  { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(56,189,248,0.25); }
+  .btn-primary:active { transform: translateY(0); box-shadow: none; }
 
   .btn-outline-dark {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -112,8 +116,9 @@
     transition: border-color 0.2s, background 0.2s, color 0.2s, transform 0.15s;
   }
   .btn-outline-dark:hover {
-    border-color: #38bdf8; background: rgba(56,189,248,0.06);
-    color: #38bdf8; transform: translateY(-1px);
+    border-color: #38bdf8; background: rgba(56,189,248,0.08);
+    color: #38bdf8; transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(56,189,248,0.15);
   }
 
   .btn-ghost-light {
@@ -126,7 +131,8 @@
   }
   .btn-ghost-light:hover {
     color: #f0f0f0; background: rgba(255,255,255,0.09);
-    border-color: rgba(255,255,255,0.22); transform: translateY(-1px);
+    border-color: rgba(255,255,255,0.3); transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,255,255,0.07);
   }
 }
 

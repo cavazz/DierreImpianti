@@ -124,14 +124,14 @@ export default function Navbar() {
         style={scrolled ? { background: 'rgba(13,21,32,0.92)', backdropFilter: 'blur(16px)' } : {}}>
 
         <nav
-          className="max-w-7xl mx-auto px-5 md:px-12 lg:px-20 flex items-center justify-between h-[60px] md:h-[64px]"
+          className="max-w-7xl mx-auto px-5 md:px-12 lg:px-20 flex items-center justify-between h-[60px] md:h-[80px]"
           aria-label="Navigazione principale">
 
           {/* Logo */}
           <button
             onClick={() => { navigate('/'); window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             aria-label="Dierre Impianti – home">
-            <LogoImage className="h-9" />
+            <LogoImage className="h-12 md:h-[60px]" />
           </button>
 
           {/* Desktop links */}
@@ -140,7 +140,7 @@ export default function Navbar() {
               <li key={l.label} className="relative group">
                 <button
                   onClick={() => go(l.href, l.type)}
-                  className="text-[0.8125rem] font-semibold text-text-s hover:text-text-p transition-colors duration-200 py-1">
+                  className="text-[0.875rem] font-semibold text-text-s hover:text-text-p transition-colors duration-200 py-1">
                   {l.label}
                 </button>
                 {/* Animated underline */}
@@ -155,7 +155,7 @@ export default function Navbar() {
               onClick={() => go('/contatti', 'route')}
               whileHover={{ scale: 1.03, filter: 'brightness(1.08)' }}
               whileTap={{ scale: 0.97 }}
-              className="hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.8125rem] px-4 py-2.5 rounded-md text-dark"
+              className="hidden sm:inline-flex items-center gap-1.5 font-display font-700 text-[0.875rem] px-5 py-3 rounded-md text-dark"
               style={{ background: 'linear-gradient(135deg, #f5c430 0%, #38bdf8 100%)', transition: 'filter 0.2s, transform 0.15s' }}>
               Preventivo Gratuito
               <ArrowUpRight size={14} aria-hidden="true"/>

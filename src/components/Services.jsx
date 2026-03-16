@@ -16,31 +16,6 @@ const services = [
   { icon: CloudLightning, n: '10', title: 'Parafulmine',          tags: 'LPS · CEI 81 · Verifiche',            desc: 'Progettazione e installazione di sistemi di protezione contro i fulmini (LPS). Verifiche periodiche secondo CEI 81.' },
 ]
 
-/* Ticker strip */
-function Ticker() {
-  const items = services.flatMap(s => [s.title, '·'])
-  return (
-    <div className="bg-dark border-y border-white/8 py-4 overflow-hidden" aria-hidden="true">
-      <div className="flex gap-0">
-        <ul className="ticker-wrap animate-marquee flex-shrink-0" role="list">
-          {items.map((t, i) => (
-            <li key={i} className={`px-5 flex-shrink-0 text-[11px] font-bold tracking-[0.15em] uppercase whitespace-nowrap ${t === '·' ? 'text-accent' : 'text-white/30'}`}>
-              {t}
-            </li>
-          ))}
-        </ul>
-        <ul className="ticker-wrap animate-marquee2 flex-shrink-0" aria-hidden="true" role="list">
-          {items.map((t, i) => (
-            <li key={i} className={`px-5 flex-shrink-0 text-[11px] font-bold tracking-[0.15em] uppercase whitespace-nowrap ${t === '·' ? 'text-accent' : 'text-white/30'}`}>
-              {t}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </div>
-  )
-}
-
 /* Accordion row */
 function Row({ s, index, active, setActive }) {
   const isOpen   = active === index
@@ -127,8 +102,6 @@ export default function Services() {
 
   return (
     <>
-      <Ticker/>
-
       <section id="servizi" aria-labelledby="svc-title" className="bg-bg">
         <div className="container-xl section-pad">
 

@@ -92,17 +92,17 @@ export default function Footer() {
             <ul className="space-y-3 mb-10" role="list">
               <li>
                 <button onClick={goServizi}
-                  className="text-text-s hover:text-text-p text-sm transition-colors duration-150 text-left">
+                  className="text-text-s hover:text-accent text-sm transition-colors duration-150 text-left inline-flex items-center gap-1.5 group">
                   Servizi
                 </button>
               </li>
               <li>
-                <Link to="/chi-siamo" className="text-text-s hover:text-text-p text-sm transition-colors duration-150">
+                <Link to="/chi-siamo" className="text-text-s hover:text-accent text-sm transition-colors duration-150 inline-flex items-center gap-1.5">
                   Chi Siamo
                 </Link>
               </li>
               <li>
-                <Link to="/contatti" className="text-text-s hover:text-text-p text-sm transition-colors duration-150">
+                <Link to="/contatti" className="text-text-s hover:text-accent text-sm transition-colors duration-150 inline-flex items-center gap-1.5">
                   Contatti
                 </Link>
               </li>
@@ -116,7 +116,7 @@ export default function Footer() {
                 ['Accessibilità',   '/accessibilita'],
               ].map(([l, to]) => (
                 <li key={to}>
-                  <Link to={to} className="text-text-s hover:text-text-p text-sm transition-colors duration-150">
+                  <Link to={to} className="text-text-s hover:text-accent text-sm transition-colors duration-150 inline-flex items-center gap-1.5">
                     {l}
                   </Link>
                 </li>
@@ -129,8 +129,10 @@ export default function Footer() {
             <p className="text-text-xs text-[10px] font-bold uppercase tracking-[0.2em] mb-5">Contatti</p>
 
             <a href="tel:+393473177613"
-              className="group flex items-center gap-3.5 mb-7 p-4 rounded-xl transition-all duration-200"
-              style={{ border: '1px solid rgba(56,189,248,0.18)', background: 'rgba(56,189,248,0.04)' }}>
+              className="group flex items-center gap-3.5 mb-7 p-4 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-100"
+              style={{ border: '1px solid rgba(56,189,248,0.18)', background: 'rgba(56,189,248,0.04)' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(56,189,248,0.10)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(56,189,248,0.04)'}>
               <span className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
                 style={{ background: 'rgba(56,189,248,0.14)' }}>
                 <Phone size={16} className="text-accent" aria-hidden="true"/>
@@ -145,13 +147,13 @@ export default function Footer() {
 
             <address className="not-italic space-y-4">
               <a href="mailto:info@dierreimpianti.it"
-                className="flex items-center gap-3 text-text-s hover:text-text-p transition-colors duration-150">
+                className="flex items-center gap-3 text-text-s hover:text-accent transition-colors duration-150 group">
                 <Mail size={13} className="text-accent flex-shrink-0" aria-hidden="true"/>
                 <span className="text-sm">info@dierreimpianti.it</span>
               </a>
               <a href="https://maps.google.com/?q=Via+Madonna+Della+Mercede+6+Piove+di+Sacco+PD"
                 target="_blank" rel="noopener noreferrer"
-                className="flex items-start gap-3 text-text-s hover:text-text-p transition-colors duration-150">
+                className="flex items-start gap-3 text-text-s hover:text-accent transition-colors duration-150 group">
                 <MapPin size={13} className="text-accent flex-shrink-0 mt-0.5" aria-hidden="true"/>
                 <span className="text-sm leading-relaxed">
                   Via Madonna Della Mercede 6<br/>
