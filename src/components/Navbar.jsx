@@ -5,9 +5,9 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import LogoImage from './LogoImage'
 
 const links = [
-  { label: 'Servizi',   href: '#servizi',   type: 'scroll' },
-  { label: 'Chi Siamo', href: '/chi-siamo', type: 'route'  },
-  { label: 'Contatti',  href: '/contatti',  type: 'route'  },
+  { label: 'Servizi',   href: '/servizi',   type: 'route' },
+  { label: 'Chi Siamo', href: '/chi-siamo', type: 'route' },
+  { label: 'Contatti',  href: '/contatti',  type: 'route' },
 ]
 
 /* ── Hamburger ──────────────────────────────────────── */

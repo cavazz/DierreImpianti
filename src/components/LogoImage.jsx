@@ -38,12 +38,15 @@ export default function LogoImage({ className = '' }) {
       />
 
       {/* Logo originale */}
-      <img
-        src="/logo.webp"
-        alt="Dierre Impianti"
-        className="h-full w-auto object-contain relative z-10"
-        draggable={false}
-      />
+      <picture className="h-full relative z-10">
+        <source srcSet="/logo.webp" type="image/webp" />
+        <img
+          src="/logo.png"
+          alt="Dierre Impianti"
+          className="h-full w-auto object-contain"
+          draggable={false}
+        />
+      </picture>
     </motion.div>
   )
 }

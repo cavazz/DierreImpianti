@@ -14,14 +14,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   const goHome = () => { navigate('/'); window.scrollTo({ top: 0 }) }
-  const goServizi = () => {
-    if (window.location.pathname !== '/') {
-      navigate('/')
-      setTimeout(() => document.querySelector('#servizi')?.scrollIntoView({ behavior: 'smooth' }), 150)
-    } else {
-      document.querySelector('#servizi')?.scrollIntoView({ behavior: 'smooth' })
-    }
-  }
+  const goServizi = () => { navigate('/servizi'); window.scrollTo({ top: 0, behavior: 'smooth' }) }
 
   return (
     <footer className="bg-dark border-t border-white/6" role="contentinfo" aria-label="Piè di pagina">
