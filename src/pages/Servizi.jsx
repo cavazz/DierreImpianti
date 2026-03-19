@@ -1,8 +1,13 @@
 import PageBanner    from '../components/PageBanner'
 import Services      from '../components/Services'
 import VideoCollage  from '../components/VideoCollage'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 export default function Servizi() {
+  usePageMeta({
+    title: 'Servizi · Dierre Impianti | Elettrico, Fotovoltaico, Domotica Padova',
+    description: 'Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati, automazioni e videosorveglianza. Servizi professionali nella provincia di Padova.',
+  })
   return (
     <>
       <PageBanner

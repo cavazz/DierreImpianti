@@ -2,11 +2,114 @@
 <html lang="it">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Dierre Impianti - Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Provincia di Padova." />
-    <meta name="keywords" content="impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati, Piove di Sacco, Padova" />
+
+    <!-- Primary SEO -->
     <title>Dierre Impianti | Impianti Elettrici · Padova</title>
+    <meta name="description" content="Dierre Impianti - Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova." />
+    <meta name="keywords" content="impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati, automazioni, Piove di Sacco, Padova, elettricista" />
+    <meta name="author" content="Dierre Impianti di Dainese Roberto" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://www.dierreimpianti.it/" />
+
+    <!-- Favicon & PWA -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0d1520" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Dierre Impianti" />
+
+    <!-- Open Graph (Facebook, LinkedIn, WhatsApp) -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:url"         content="https://www.dierreimpianti.it/" />
+    <meta property="og:site_name"   content="Dierre Impianti" />
+    <meta property="og:locale"      content="it_IT" />
+    <meta property="og:title"       content="Dierre Impianti | Impianti Elettrici · Padova" />
+    <meta property="og:description" content="Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova." />
+    <meta property="og:image"       content="https://www.dierreimpianti.it/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt"   content="Dierre Impianti - Impianti tecnologici a Padova" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="Dierre Impianti | Impianti Elettrici · Padova" />
+    <meta name="twitter:description" content="Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova." />
+    <meta name="twitter:image"       content="https://www.dierreimpianti.it/og-image.jpg" />
+
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Schema.org JSON-LD — ElectricalContractor + LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["ElectricalContractor", "LocalBusiness"],
+      "name": "Dierre Impianti",
+      "legalName": "Dierre Impianti di Dainese Roberto",
+      "url": "https://www.dierreimpianti.it",
+      "logo": "https://www.dierreimpianti.it/logo.webp",
+      "image": "https://www.dierreimpianti.it/og-image.jpg",
+      "description": "Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova.",
+      "telephone": "+393473177613",
+      "email": "info@dierreimpianti.it",
+      "vatID": "IT05181630285",
+      "foundingDate": "2003",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Via Madonna Della Mercede 6",
+        "addressLocality": "Piove di Sacco",
+        "postalCode": "35028",
+        "addressRegion": "PD",
+        "addressCountry": "IT"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 45.2956,
+        "longitude": 12.0330
+      },
+      "areaServed": {
+        "@type": "AdministrativeArea",
+        "name": "Provincia di Padova"
+      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+          "opens": "08:00",
+          "closes": "18:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Saturday"],
+          "opens": "08:00",
+          "closes": "12:00"
+        }
+      ],
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Servizi Dierre Impianti",
+        "itemListElement": [
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Impianti Elettrici Civili e Industriali" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Impianti Fotovoltaici" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Domotica e Smart Home" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Impianti Antenna e TV" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Climatizzazione e Condizionamento" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reti Dati e Cablaggio Strutturato" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Automazioni e Cancelli" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Impianti di Sicurezza e Videosorveglianza" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Illuminazione LED e Architetturale" } },
+          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Colonnine Ricarica Veicoli Elettrici" } }
+        ]
+      },
+      "sameAs": [
+        "https://www.instagram.com/dierreimpianti/"
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

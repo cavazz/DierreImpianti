@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft, CheckCircle2, AlertCircle, Mail } from 'lucide-react'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const S = ({ title, children }) => (
   <section className="mb-10">
@@ -29,6 +30,10 @@ const limits = [
 ]
 
 export default function Accessibilita() {
+  usePageMeta({
+    title: 'Accessibilità · Dierre Impianti',
+    description: 'Dichiarazione di accessibilità del sito web di Dierre Impianti. Conformità WCAG 2.1 Livello AA.',
+  })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (

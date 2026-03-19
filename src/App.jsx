@@ -13,6 +13,9 @@ import Privacy         from './pages/Privacy'
 import Cookie          from './pages/Cookie'
 import Accessibilita   from './pages/Accessibilita'
 import Servizi         from './pages/Servizi'
+import TerminiServizio from './pages/TerminiServizio'
+import NotFound        from './pages/NotFound'
+import { usePageMeta } from './hooks/usePageMeta'
 
 /* ── Page transition wrapper ────────────────────────── */
 function Page({ children }) {
@@ -28,6 +31,10 @@ function Page({ children }) {
 }
 
 function HomePage() {
+  usePageMeta({
+    title: 'Dierre Impianti | Impianti Elettrici · Padova',
+    description: 'Dierre Impianti - Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova.',
+  })
   return <Page><Hero /><ServicesTeaser /></Page>
 }
 
@@ -44,6 +51,8 @@ function AppRoutes() {
         <Route path="/privacy"       element={<Page><Privacy /></Page>} />
         <Route path="/cookie"        element={<Page><Cookie /></Page>} />
         <Route path="/accessibilita" element={<Page><Accessibilita /></Page>} />
+        <Route path="/termini"       element={<Page><TerminiServizio /></Page>} />
+        <Route path="*"              element={<Page><NotFound /></Page>} />
       </Routes>
     </AnimatePresence>
   )

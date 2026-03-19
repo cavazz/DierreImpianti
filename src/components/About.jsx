@@ -4,6 +4,7 @@ import { MapPin, Phone, Mail, ShieldCheck, BadgeCheck, Zap, ClipboardCheck, Star
 import { useNavigate } from 'react-router-dom'
 import PageBanner from './PageBanner'
 import TiltCard from './TiltCard'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const stats = [
   { n: '20+',  label: 'Anni di esperienza',   note: 'Dal 2003 nel settore' },
@@ -22,6 +23,10 @@ const values = [
 ]
 
 export default function About() {
+  usePageMeta({
+    title: 'Chi Siamo · Dierre Impianti | Dal 2003 a Padova',
+    description: 'Dierre Impianti di Dainese Roberto: oltre 20 anni di esperienza in impianti elettrici e tecnologici nella provincia di Padova. Affidabilità, qualità certificata e 500+ progetti realizzati.',
+  })
   const storyRef = useRef(null)
   const valRef   = useRef(null)
   const ctaRef   = useRef(null)

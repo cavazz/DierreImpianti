@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const S = ({ title, children }) => (
   <section className="mb-10">
@@ -12,6 +13,10 @@ const A = ({ href, children }) => <a href={href} target="_blank" rel="noopener n
 const B = ({ children }) => <strong className="text-text-p font-medium">{children}</strong>
 
 export default function Privacy() {
+  usePageMeta({
+    title: 'Privacy Policy · Dierre Impianti',
+    description: 'Informativa sulla privacy di Dierre Impianti. Scopri come trattiamo i tuoi dati personali nel rispetto del GDPR.',
+  })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (

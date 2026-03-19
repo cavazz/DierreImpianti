@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const S = ({ title, children }) => (
   <section className="mb-10">
@@ -11,6 +12,10 @@ const S = ({ title, children }) => (
 const A = ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-accent hover:text-accent-h underline transition-colors">{children}</a>
 
 export default function Cookie() {
+  usePageMeta({
+    title: 'Cookie Policy · Dierre Impianti',
+    description: 'Informativa sui cookie di Dierre Impianti. Scopri quali cookie utilizziamo e come gestire le tue preferenze.',
+  })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (

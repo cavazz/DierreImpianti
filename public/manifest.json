@@ -1,0 +1,18 @@
+{
+  "name": "Dierre Impianti",
+  "short_name": "Dierre",
+  "description": "Impianti elettrici, fotovoltaico, domotica e automazioni. Provincia di Padova.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1520",
+  "theme_color": "#0d1520",
+  "lang": "it",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

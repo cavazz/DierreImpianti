@@ -1,8 +1,10 @@
 import { useRef, useState, useId } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Phone, Mail, MapPin, Send, CheckCircle, Clock } from 'lucide-react'
+import { Phone, Mail, MapPin, Send, CheckCircle, Clock, Loader2 } from 'lucide-react'
+import emailjs from '@emailjs/browser'
 import PageBanner from './PageBanner'
 import TiltCard from './TiltCard'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const inputCls = [
   'w-full px-4 py-3.5 rounded-lg text-sm font-sans',
@@ -26,23 +28,61 @@ function Field({ id, label, required, children }) {
   )
 }
 
+const SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID
+const PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+const EMAILJS_OK  = SERVICE_ID && !SERVICE_ID.startsWith('service_xxx')
+
 export default function Contact() {
   const uid    = useId()
   const ref    = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-60px' })
-  const [sent, setSent] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' })
+  const [sent, setSent]       = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError]     = useState('')
+  const [form, setForm]       = useState({ name: '', email: '', phone: '', message: '' })
+
+  usePageMeta({
+    title: 'Contatti · Dierre Impianti | Preventivo Gratuito Padova',
+    description: 'Richiedi un preventivo gratuito a Dierre Impianti. Impianti elettrici, fotovoltaico e domotica nella provincia di Padova. Risposta entro 24 ore.',
+  })
 
   const set = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Richiesta preventivo da ${form.name}`)
-    const body    = encodeURIComponent(
-      `Nome: ${form.name}\nTelefono: ${form.phone || '—'}\nEmail: ${form.email}\n\nMessaggio:\n${form.message}`
-    )
-    window.location.href = `mailto:info@dierreimpianti.it?subject=${subject}&body=${body}`
-    setSent(true)
+    setLoading(true)
+    setError('')
+
+    if (EMAILJS_OK) {
+      try {
+        await emailjs.send(
+          SERVICE_ID,
+          TEMPLATE_ID,
+          {
+            from_name:  form.name,
+            from_email: form.email,
+            phone:      form.phone || '—',
+            message:    form.message,
+          },
+          PUBLIC_KEY,
+        )
+        setSent(true)
+      } catch {
+        setError('Invio non riuscito. Puoi contattarci direttamente al +39 347 317 7613.')
+      } finally {
+        setLoading(false)
+      }
+    } else {
+      // Fallback mailto se EmailJS non è configurato
+      const subject = encodeURIComponent(`Richiesta preventivo da ${form.name}`)
+      const body    = encodeURIComponent(
+        `Nome: ${form.name}\nTelefono: ${form.phone || '—'}\nEmail: ${form.email}\n\nMessaggio:\n${form.message}`
+      )
+      window.location.href = `mailto:info@dierreimpianti.it?subject=${subject}&body=${body}`
+      setLoading(false)
+      setSent(true)
+    }
   }
 
   return (
@@ -170,7 +210,7 @@ export default function Contact() {
                     <div>
                       <h3 className="font-display font-700 text-text-p text-xl mb-2">Ottimo!</h3>
                       <p className="text-text-s text-sm leading-relaxed max-w-xs mx-auto">
-                        Si è aperta la tua app email. Invia il messaggio per completare la richiesta di preventivo.
+                        Messaggio ricevuto! Ti risponderemo entro 24 ore.
                       </p>
                     </div>
                     <button
@@ -204,9 +244,18 @@ export default function Contact() {
                           className={`${inputCls} resize-none min-h-[140px]`}/>
                       </Field>
 
-                      <button type="submit" className="btn-primary w-full">
-                        <span>Invia Richiesta</span>
-                        <Send size={15} aria-hidden="true"/>
+                      {error && (
+                        <p role="alert" className="text-red-400 text-sm text-center py-2 px-4 rounded-lg"
+                          style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}>
+                          {error}
+                        </p>
+                      )}
+
+                      <button type="submit" disabled={loading} className="btn-primary w-full disabled:opacity-60 disabled:cursor-not-allowed">
+                        {loading
+                          ? <><Loader2 size={15} className="animate-spin" aria-hidden="true"/><span>Invio in corso…</span></>
+                          : <><span>Invia Richiesta</span><Send size={15} aria-hidden="true"/></>
+                        }
                       </button>
 
                       <p className="text-text-xs text-xs text-center leading-relaxed">

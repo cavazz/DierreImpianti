@@ -104,9 +104,10 @@ export default function Footer() {
             <p className="text-text-xs text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Legale</p>
             <ul className="space-y-2.5" role="list">
               {[
-                ['Privacy Policy',  '/privacy'],
-                ['Cookie Policy',   '/cookie'],
-                ['Accessibilità',   '/accessibilita'],
+                ['Privacy Policy',    '/privacy'],
+                ['Cookie Policy',     '/cookie'],
+                ['Termini di Servizio', '/termini'],
+                ['Accessibilità',     '/accessibilita'],
               ].map(([l, to]) => (
                 <li key={to}>
                   <Link to={to} className="text-text-s hover:text-accent text-sm transition-colors duration-150 inline-flex items-center gap-1.5">
