@@ -185,39 +185,41 @@ function disposeScene(scene) {
   })
 }
 
+// ── Inizializza renderer (chiamato quando il container ha dimensioni reali) ──
+function initRenderer(mount, stateRef) {
+  if (stateRef.current.renderer) return
+  const w = mount.offsetWidth || 600
+  const h = mount.offsetHeight || 500
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setSize(w, h)
+  renderer.setClearColor(0x000000, 1)
+  mount.appendChild(renderer.domElement)
+  const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
+  camera.position.set(0, 0, 4)
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.05
+  controls.enableZoom = false
+  controls.enablePan = false
+  stateRef.current = { renderer, camera, controls }
+}
+
 // ── Componente ──
 export default function ServicesApple3D({ serviceIndex, color }) {
   const mountRef = useRef(null)
   const stateRef = useRef({})
+  const rafRef = useRef(null)
 
   useEffect(() => {
     const mount = mountRef.current
     if (!mount) return
 
-    const w = mount.clientWidth || 600
-    const h = mount.clientHeight || 500
-
-    // Crea renderer UNA VOLTA
-    if (!stateRef.current.renderer) {
-      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-      renderer.setSize(w, h)
-      renderer.setClearColor(0x000000, 0)
-      mount.appendChild(renderer.domElement)
-
-      const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
-      camera.position.set(0, 0, 4)
-
-      const controls = new OrbitControls(camera, renderer.domElement)
-      controls.enableDamping = true
-      controls.dampingFactor = 0.05
-      controls.enableZoom = false
-      controls.enablePan = false
-
-      stateRef.current = { renderer, camera, controls }
-    }
+    // Inizializza renderer appena il container è pronto
+    initRenderer(mount, stateRef)
 
     const { renderer, camera, controls } = stateRef.current
+    if (!renderer) return
 
     // Dispose scena precedente
     if (stateRef.current.scene) {
@@ -230,10 +232,10 @@ export default function ServicesApple3D({ serviceIndex, color }) {
     stateRef.current.scene = scene
 
     // Loop animazione
-    let rafId
+    cancelAnimationFrame(rafRef.current)
     const startTime = performance.now()
     const loop = () => {
-      rafId = requestAnimationFrame(loop)
+      rafRef.current = requestAnimationFrame(loop)
       const t = (performance.now() - startTime) / 1000
       animate.forEach(fn => fn(t))
       controls.update()
@@ -243,8 +245,9 @@ export default function ServicesApple3D({ serviceIndex, color }) {
 
     // Resize
     const onResize = () => {
-      const w2 = mount.clientWidth
-      const h2 = mount.clientHeight
+      const w2 = mount.offsetWidth
+      const h2 = mount.offsetHeight
+      if (!w2 || !h2) return
       camera.aspect = w2 / h2
       camera.updateProjectionMatrix()
       renderer.setSize(w2, h2)
@@ -252,7 +255,7 @@ export default function ServicesApple3D({ serviceIndex, color }) {
     window.addEventListener('resize', onResize)
 
     return () => {
-      cancelAnimationFrame(rafId)
+      cancelAnimationFrame(rafRef.current)
       window.removeEventListener('resize', onResize)
     }
   }, [serviceIndex, color])
@@ -271,11 +274,13 @@ export default function ServicesApple3D({ serviceIndex, color }) {
   }, [])
 
   return (
-    <div
-      ref={mountRef}
-      style={{ width: '100%', maxWidth: 600, height: 500, cursor: 'grab', position: 'relative' }}
-      onMouseDown={e => { e.currentTarget.style.cursor = 'grabbing' }}
-      onMouseUp={e => { e.currentTarget.style.cursor = 'grab' }}
-    />
+    <div style={{ width: '100%', maxWidth: 640, height: 500, position: 'relative', flexShrink: 0 }}>
+      <div
+        ref={mountRef}
+        style={{ width: '100%', height: '100%', cursor: 'grab' }}
+        onMouseDown={e => { e.currentTarget.style.cursor = 'grabbing' }}
+        onMouseUp={e => { e.currentTarget.style.cursor = 'grab' }}
+      />
+    </div>
   )
 }

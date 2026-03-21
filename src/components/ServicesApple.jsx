@@ -69,7 +69,7 @@ export default function ServicesApple() {
 
   return (
     <section className="bg-black min-h-screen flex items-center py-20 relative">
-      <div className="w-full px-6 lg:pl-16 lg:pr-10">
+      <div className="w-full px-6 lg:pl-10 lg:pr-10">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-0">
 
           {/* ── LEFT: frecce + pill list ── */}
