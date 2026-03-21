@@ -187,6 +187,7 @@ export default function ServicesApple3D({ serviceIndex, color }) {
 
     const w = mount.clientWidth
     const h = mount.clientHeight
+    if (w === 0 || h === 0) return
 
     // Crea renderer UNA VOLTA
     if (!stateRef.current.renderer) {
@@ -220,15 +221,6 @@ export default function ServicesApple3D({ serviceIndex, color }) {
     const { scene, animate } = buildScene(serviceIndex, color)
     stateRef.current.scene = scene
 
-    // Parallax mouse
-    let mx = 0, my = 0
-    const onMouse = e => {
-      const rect = mount.getBoundingClientRect()
-      mx = ((e.clientX - rect.left) / rect.width - 0.5) * 2
-      my = ((e.clientY - rect.top) / rect.height - 0.5) * 2
-    }
-    mount.addEventListener('mousemove', onMouse)
-
     // Loop animazione
     let rafId
     const startTime = performance.now()
@@ -236,9 +228,6 @@ export default function ServicesApple3D({ serviceIndex, color }) {
       rafId = requestAnimationFrame(loop)
       const t = (performance.now() - startTime) / 1000
       animate.forEach(fn => fn(t))
-      camera.position.x += (mx * 0.3 - camera.position.x) * 0.05
-      camera.position.y += (-my * 0.2 - camera.position.y) * 0.05
-      camera.lookAt(0, 0, 0)
       controls.update()
       renderer.render(scene, camera)
     }
@@ -256,7 +245,6 @@ export default function ServicesApple3D({ serviceIndex, color }) {
 
     return () => {
       cancelAnimationFrame(rafId)
-      mount.removeEventListener('mousemove', onMouse)
       window.removeEventListener('resize', onResize)
     }
   }, [serviceIndex, color])
@@ -264,10 +252,12 @@ export default function ServicesApple3D({ serviceIndex, color }) {
   // Cleanup finale al unmount
   useEffect(() => {
     return () => {
-      if (stateRef.current.renderer) {
-        stateRef.current.renderer.dispose()
-        stateRef.current.controls?.dispose()
-        if (stateRef.current.scene) disposeScene(stateRef.current.scene)
+      const { renderer, controls, scene } = stateRef.current
+      if (renderer) {
+        renderer.domElement.remove()
+        renderer.dispose()
+        controls?.dispose()
+        if (scene) disposeScene(scene)
       }
     }
   }, [])
