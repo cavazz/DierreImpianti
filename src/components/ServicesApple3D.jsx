@@ -165,13 +165,22 @@ function buildScene(index, color) {
   return { scene, animate }
 }
 
-// ── Dispose scena ──
+// ── Dispose scena (deduplicato per evitare double-dispose) ──
 function disposeScene(scene) {
+  const disposed = new Set()
   scene.traverse(obj => {
-    if (obj.geometry) obj.geometry.dispose()
+    if (obj.geometry && !disposed.has(obj.geometry)) {
+      obj.geometry.dispose()
+      disposed.add(obj.geometry)
+    }
     if (obj.material) {
-      if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose())
-      else obj.material.dispose()
+      const mats = Array.isArray(obj.material) ? obj.material : [obj.material]
+      mats.forEach(m => {
+        if (!disposed.has(m)) {
+          m.dispose()
+          disposed.add(m)
+        }
+      })
     }
   })
 }

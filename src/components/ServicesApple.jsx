@@ -119,13 +119,28 @@ export default function ServicesApple() {
                     {active === i && <DescCard key={svc.title} svc={svc} />}
                   </AnimatePresence>
                   <Pill svc={svc} isActive={active === i} onClick={() => setActive(i)} />
+                  {/* Mobile: canvas sotto la pill attiva */}
+                  <AnimatePresence>
+                    {active === i && (
+                      <motion.div
+                        key={`canvas-${svc.title}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="md:hidden mt-4 mb-2"
+                      >
+                        <ServicesApple3D serviceIndex={i} color={svc.color} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ── RIGHT: canvas Three.js ── */}
-          <div className="flex-1 flex items-center justify-center md:pl-10">
+          {/* ── RIGHT: canvas Three.js (solo desktop) ── */}
+          <div className="hidden md:flex flex-1 items-center justify-center md:pl-10">
             <ServicesApple3D serviceIndex={active} color={SERVICES[active].color} />
           </div>
 
