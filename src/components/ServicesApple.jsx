@@ -39,7 +39,6 @@ function Pill({ svc, isActive, onClick }) {
 function DescCard({ svc }) {
   return (
     <motion.div
-      key={svc.title}
       initial={{ opacity: 0, y: -8, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: -8, scale: 0.98 }}
@@ -74,6 +73,7 @@ export default function ServicesApple() {
               <motion.button
                 onClick={prev}
                 disabled={active === 0}
+                aria-label="Servizio precedente"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
@@ -92,6 +92,7 @@ export default function ServicesApple() {
               <motion.button
                 onClick={next}
                 disabled={active === SERVICES.length - 1}
+                aria-label="Servizio successivo"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
@@ -115,7 +116,7 @@ export default function ServicesApple() {
                 <div key={svc.title}>
                   {/* Card descrizione SOPRA la pill attiva */}
                   <AnimatePresence>
-                    {active === i && <DescCard svc={svc} />}
+                    {active === i && <DescCard key={svc.title} svc={svc} />}
                   </AnimatePresence>
                   <Pill svc={svc} isActive={active === i} onClick={() => setActive(i)} />
                 </div>
