@@ -68,7 +68,7 @@ export default function ServicesApple() {
   const next = useCallback(() => setActive(i => Math.min(SERVICES.length - 1, i + 1)), [])
 
   return (
-    <section className="bg-black min-h-screen flex items-center py-20">
+    <section className="bg-black min-h-screen flex items-center py-20 relative">
       <div className="w-full max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-0">
 

@@ -194,9 +194,8 @@ export default function ServicesApple3D({ serviceIndex, color }) {
     const mount = mountRef.current
     if (!mount) return
 
-    const w = mount.clientWidth
-    const h = mount.clientHeight
-    if (w === 0 || h === 0) return
+    const w = mount.clientWidth || 600
+    const h = mount.clientHeight || 500
 
     // Crea renderer UNA VOLTA
     if (!stateRef.current.renderer) {
@@ -274,8 +273,7 @@ export default function ServicesApple3D({ serviceIndex, color }) {
   return (
     <div
       ref={mountRef}
-      className="md:h-[500px] h-[300px]"
-      style={{ width: '100%', maxWidth: 600, cursor: 'grab' }}
+      style={{ width: '100%', maxWidth: 600, height: 500, cursor: 'grab', position: 'relative' }}
       onMouseDown={e => { e.currentTarget.style.cursor = 'grabbing' }}
       onMouseUp={e => { e.currentTarget.style.cursor = 'grab' }}
     />
