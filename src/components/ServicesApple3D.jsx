@@ -269,6 +269,7 @@ export default function ServicesApple3D({ serviceIndex, color }) {
         renderer.dispose()
         controls?.dispose()
         if (scene) disposeScene(scene)
+        stateRef.current = {}
       }
     }
   }, [])
