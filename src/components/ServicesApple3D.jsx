@@ -190,10 +190,10 @@ function initRenderer(mount, stateRef) {
   if (stateRef.current.renderer) return
   const w = mount.offsetWidth || 600
   const h = mount.offsetHeight || 500
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false })
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
   renderer.setSize(w, h)
-  renderer.setClearColor(0x000000, 1)
+  renderer.setClearColor(0x000000, 0)
   mount.appendChild(renderer.domElement)
   const camera = new THREE.PerspectiveCamera(50, w / h, 0.1, 100)
   camera.position.set(0, 0, 4)
@@ -275,7 +275,7 @@ export default function ServicesApple3D({ serviceIndex, color }) {
   }, [])
 
   return (
-    <div style={{ width: '100%', maxWidth: 640, height: 500, position: 'relative', flexShrink: 0 }}>
+    <div style={{ width: '100%', maxWidth: 700, height: 580, position: 'relative', flexShrink: 0 }}>
       <div
         ref={mountRef}
         style={{ width: '100%', height: '100%', cursor: 'grab' }}

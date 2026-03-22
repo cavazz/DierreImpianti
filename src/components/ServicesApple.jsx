@@ -69,73 +69,86 @@ export default function ServicesApple() {
 
   return (
     <section className="bg-black min-h-screen flex items-center py-20 relative">
-      <div className="w-full px-6 lg:pl-10 lg:pr-10">
-        <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-0">
+      <div className="w-full max-w-[1200px] mx-auto px-4 lg:px-8">
 
-          {/* ── LEFT: frecce + pill list ── */}
-          <div className="flex gap-4 md:gap-6 flex-shrink-0 md:w-[380px]">
+        {/* ── Card container stile Apple ── */}
+        <div
+          className="w-full overflow-hidden"
+          style={{
+            background: '#0a0a0a',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: 24,
+            minHeight: 640,
+          }}
+        >
+          <div className="flex flex-col md:flex-row md:items-stretch">
 
-            {/* Frecce (solo desktop) */}
-            <div className="hidden md:flex flex-col justify-center gap-3">
-              <motion.button
-                onClick={prev}
-                disabled={active === 0}
-                aria-label="Servizio precedente"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{
-                  background: active === 0 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: active === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
-                  cursor: active === 0 ? 'not-allowed' : 'pointer',
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 11L3 7l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M11 7H3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </motion.button>
-              <motion.button
-                onClick={next}
-                disabled={active === SERVICES.length - 1}
-                aria-label="Servizio successivo"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200"
-                style={{
-                  background: active === SERVICES.length - 1 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                  color: active === SERVICES.length - 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
-                  cursor: active === SERVICES.length - 1 ? 'not-allowed' : 'pointer',
-                }}
-              >
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-                </svg>
-              </motion.button>
+            {/* ── LEFT: frecce + pill list ── */}
+            <div className="flex gap-3 flex-shrink-0 md:w-[360px] p-10">
+
+              {/* Frecce (solo desktop) */}
+              <div className="hidden md:flex flex-col justify-center gap-3">
+                <motion.button
+                  onClick={prev}
+                  disabled={active === 0}
+                  aria-label="Servizio precedente"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
+                  style={{
+                    background: active === 0 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: active === 0 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
+                    cursor: active === 0 ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                    <path d="M7 11L3 7l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M11 7H3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </motion.button>
+                <motion.button
+                  onClick={next}
+                  disabled={active === SERVICES.length - 1}
+                  aria-label="Servizio successivo"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
+                  style={{
+                    background: active === SERVICES.length - 1 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.1)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    color: active === SERVICES.length - 1 ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.7)',
+                    cursor: active === SERVICES.length - 1 ? 'not-allowed' : 'pointer',
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                    <path d="M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M3 7h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </motion.button>
+              </div>
+
+              {/* Pill list accordion */}
+              <div className="flex-1 flex flex-col gap-2 justify-center">
+                {SERVICES.map((svc, i) => (
+                  <PillItem
+                    key={svc.title}
+                    svc={svc}
+                    isActive={active === i}
+                    onClick={() => setActive(i)}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* Pill list accordion */}
-            <div className="flex-1 flex flex-col gap-2">
-              {SERVICES.map((svc, i) => (
-                <PillItem
-                  key={svc.title}
-                  svc={svc}
-                  isActive={active === i}
-                  onClick={() => setActive(i)}
-                />
-              ))}
+            {/* ── RIGHT: canvas Three.js ── */}
+            <div className="flex-1 flex items-center justify-center p-4 md:p-6">
+              <ServicesApple3D serviceIndex={active} color={SERVICES[active].color} />
             </div>
-          </div>
 
-          {/* ── RIGHT: canvas Three.js ── */}
-          <div className="flex-1 flex items-center justify-center md:pl-10 mt-8 md:mt-0">
-            <ServicesApple3D serviceIndex={active} color={SERVICES[active].color} />
           </div>
-
         </div>
+
       </div>
     </section>
   )
