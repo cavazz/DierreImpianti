@@ -1,0 +1,100 @@
+<h2>Come vuoi strutturare la pagina Servizi?</h2>
+<p class="subtitle">Ispirazione Apple — scegli il layout che corrisponde a quello che hai visto nel video</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="A" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:20px;min-height:200px;display:flex;flex-direction:column;gap:12px;">
+      <!-- Stacked full-screen sections mockup -->
+      <div style="background:#111;border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px;border:1px solid #222;">
+        <div style="flex:1">
+          <div style="font-size:11px;color:#888;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Impianti Elettrici</div>
+          <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.1;">Progettazione<br/>& installazione.</div>
+          <div style="font-size:11px;color:#555;margin-top:8px;">Civile · Industriale</div>
+        </div>
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,#1a1a2e,#16213e);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;">⚡</div>
+      </div>
+      <div style="background:#111;border-radius:8px;padding:16px;display:flex;align-items:center;gap:12px;border:1px solid #222;flex-direction:row-reverse;">
+        <div style="flex:1;text-align:right">
+          <div style="font-size:11px;color:#f59e0b;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Fotovoltaico</div>
+          <div style="font-size:22px;font-weight:900;color:#fff;line-height:1.1;">Energia pulita<br/>per sempre.</div>
+        </div>
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,#1a1a0e,#2a2a00);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:32px;">☀️</div>
+      </div>
+      <div style="text-align:center;color:#444;font-size:10px;padding:4px;">↓ e così via per tutti i servizi...</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Sezioni a schermo intero (stacked)</h3>
+      <p>Ogni servizio occupa tutta la viewport. Immagine 3D da un lato, testo dall'altro. Layout alternato sinistra/destra. Simile alla pagina prodotti Apple (iPhone, Mac).</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="B" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:20px;min-height:200px;">
+      <!-- Horizontal scroll / snap -->
+      <div style="display:flex;gap:8px;overflow:hidden;border-radius:8px;">
+        <div style="min-width:140px;background:#111;border-radius:8px;padding:14px;border:1px solid #333;flex-shrink:0;">
+          <div style="font-size:28px;margin-bottom:8px;">⚡</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Impianti<br/>Elettrici</div>
+          <div style="font-size:10px;color:#555;margin-top:4px;">01</div>
+        </div>
+        <div style="min-width:140px;background:linear-gradient(135deg,#0a0a1a,#111);border-radius:8px;padding:14px;border:2px solid #3b82f6;flex-shrink:0;">
+          <div style="font-size:28px;margin-bottom:8px;">☀️</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Fotovoltaico</div>
+          <div style="font-size:10px;color:#3b82f6;margin-top:4px;">02</div>
+        </div>
+        <div style="min-width:140px;background:#111;border-radius:8px;padding:14px;border:1px solid #333;flex-shrink:0;">
+          <div style="font-size:28px;margin-bottom:8px;">🏠</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Domotica</div>
+          <div style="font-size:10px;color:#555;margin-top:4px;">03</div>
+        </div>
+        <div style="min-width:140px;background:#111;border-radius:8px;padding:14px;border:1px solid #333;flex-shrink:0;">
+          <div style="font-size:28px;margin-bottom:8px;">📡</div>
+          <div style="font-size:13px;font-weight:700;color:#fff;">Sicurezza</div>
+          <div style="font-size:10px;color:#555;margin-top:4px;">04</div>
+        </div>
+      </div>
+      <div style="background:#111;border-radius:8px;margin-top:10px;padding:16px;border:1px solid #1d4ed8;">
+        <div style="font-size:11px;color:#3b82f6;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">Fotovoltaico — dettaglio</div>
+        <div style="font-size:20px;font-weight:900;color:#fff;">Energia pulita per casa e azienda.</div>
+        <div style="font-size:11px;color:#888;margin-top:6px;">Grande immagine 3D + descrizione completa</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Scroll orizzontale con snap</h3>
+      <p>Barra di navigazione in alto con tutti i servizi. Sotto, uno slot grande che mostra il dettaglio del servizio selezionato/scrollato. Stile Apple Music o Apple Watch.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="C" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0a0a0a;padding:20px;min-height:200px;display:flex;flex-direction:column;gap:8px;">
+      <!-- Apple-style cinematic with sticky text -->
+      <div style="display:flex;gap:8px;height:160px;">
+        <div style="width:40%;background:#111;border-radius:8px;padding:14px;border:1px solid #222;display:flex;flex-direction:column;justify-content:center;">
+          <div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;">01 / 10</div>
+          <div style="font-size:14px;font-weight:900;color:#fff;line-height:1.1;">Impianti<br/>Elettrici</div>
+          <div style="font-size:9px;color:#555;margin-top:6px;">Civile · Industriale · Manutenzione</div>
+          <div style="width:30px;height:2px;background:#3b82f6;margin-top:8px;border-radius:2px;"></div>
+        </div>
+        <div style="flex:1;background:linear-gradient(135deg,#0d0d1a 0%,#1a1a3e 50%,#0d0d1a 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:56px;position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(59,130,246,0.15),transparent 70%);"></div>
+          ⚡
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;gap:4px;padding:4px;">
+        <div style="width:20px;height:3px;background:#3b82f6;border-radius:2px;"></div>
+        <div style="width:6px;height:3px;background:#333;border-radius:2px;"></div>
+        <div style="width:6px;height:3px;background:#333;border-radius:2px;"></div>
+        <div style="width:6px;height:3px;background:#333;border-radius:2px;"></div>
+      </div>
+      <div style="text-align:center;color:#444;font-size:10px;">← swipe/scroll per cambiare servizio →</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Carousel cinematico con immagini 3D grandi</h3>
+      <p>Un grande "stage" per ogni servizio. Testo fisso a sinistra, immagine 3D enorme a destra. Si scorre verticalmente e ogni servizio "entra" con un'animazione cinematica. Stile Apple TV / Apple Vision Pro.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:24px;text-align:center;">Non hai visto il video — descrivi anche brevemente come era strutturato se nessuno corrisponde esattamente.</p>

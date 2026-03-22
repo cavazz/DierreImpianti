@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mockup — Servizi stile Apple</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #000; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif; color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px 20px; }
+
+  h2 { font-size: 18px; font-weight: 600; margin-bottom: 6px; color: #fff; text-align:center; }
+  .subtitle { font-size: 13px; color: #888; text-align: center; margin-bottom: 32px; }
+
+  .apple-section {
+    width: 100%;
+    max-width: 1100px;
+    background: #0a0a0a;
+    border-radius: 20px;
+    border: 1px solid #1a1a1a;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: 520px;
+  }
+
+  /* LEFT PANEL */
+  .left-panel {
+    padding: 48px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #1a1a1a;
+  }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 18px;
+    border-radius: 100px;
+    background: #111;
+    border: 1px solid #222;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+  .pill:hover { background: #161616; border-color: #333; }
+  .pill.active { background: #1a1a2e; border-color: #3b82f6; }
+
+  .pill-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 1.5px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    transition: all 0.2s;
+    color: #888;
+  }
+  .pill.active .pill-icon {
+    border-color: #3b82f6;
+    background: #3b82f6;
+    color: #fff;
+  }
+
+  .pill-label {
+    font-size: 15px;
+    font-weight: 500;
+    color: #ccc;
+    transition: color 0.2s;
+  }
+  .pill.active .pill-label { color: #fff; }
+
+  /* RIGHT PANEL */
+  .right-panel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 520px;
+  }
+
+  .service-image {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 48px;
+    text-align: center;
+    animation: fadeIn 0.4s ease;
+  }
+  .service-image.visible { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .img-3d {
+    width: 340px;
+    height: 280px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .img-3d-inner {
+    font-size: 100px;
+    filter: drop-shadow(0 0 40px var(--glow));
+    transform: perspective(400px) rotateX(5deg) rotateY(-8deg);
+    transition: transform 0.4s ease;
+  }
+  .img-3d:hover .img-3d-inner { transform: perspective(400px) rotateX(8deg) rotateY(5deg); }
+
+  .img-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: var(--glow);
+    opacity: 0.15;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+
+  .service-name {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  .service-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: #666;
+    max-width: 360px;
+    line-height: 1.6;
+  }
+
+  /* Note */
+  .note {
+    margin-top: 24px;
+    padding: 16px 24px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    max-width: 1100px;
+    width: 100%;
+    font-size: 13px;
+    color: #666;
+    text-align: center;
+  }
+  .note strong { color: #aaa; }
+</style>
+</head>
+<body>
+
+<h2>Mockup — Sezione Servizi stile Apple</h2>
+<p class="subtitle">Clicca le pill a sinistra per vedere il cambio immagine</p>
+
+<div class="apple-section">
+
+  <!-- LEFT: pill list -->
+  <div class="left-panel">
+    <div class="pill active" onclick="select(this, 0)">
+      <div class="pill-icon">−</div>
+      <span class="pill-label">Impianti Elettrici</span>
+    </div>
+    <div class="pill" onclick="select(this, 1)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Fotovoltaico</span>
+    </div>
+    <div class="pill" onclick="select(this, 2)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Domotica</span>
+    </div>
+    <div class="pill" onclick="select(this, 3)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Sicurezza & TVCC</span>
+    </div>
+    <div class="pill" onclick="select(this, 4)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Antenne</span>
+    </div>
+    <div class="pill" onclick="select(this, 5)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Antincendio</span>
+    </div>
+    <div class="pill" onclick="select(this, 6)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Climatizzazione</span>
+    </div>
+    <div class="pill" onclick="select(this, 7)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Reti Dati</span>
+    </div>
+    <div class="pill" onclick="select(this, 8)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Automazioni</span>
+    </div>
+    <div class="pill" onclick="select(this, 9)">
+      <div class="pill-icon">+</div>
+      <span class="pill-label">Parafulmine</span>
+    </div>
+  </div>
+
+  <!-- RIGHT: image area -->
+  <div class="right-panel">
+
+    <div class="service-image visible" id="svc-0">
+      <div class="img-3d" style="background:radial-gradient(circle,#0d1a2e,#000);--glow:#3b82f6;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">⚡</div>
+      </div>
+      <div class="service-name">Servizio 01</div>
+      <div class="service-title">Impianti Elettrici</div>
+      <div class="service-desc">Progettazione e realizzazione di impianti elettrici civili e industriali. Adeguamento normativo e manutenzione programmata.</div>
+    </div>
+
+    <div class="service-image" id="svc-1">
+      <div class="img-3d" style="background:radial-gradient(circle,#1a1500,#000);--glow:#f59e0b;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">☀️</div>
+      </div>
+      <div class="service-name">Servizio 02</div>
+      <div class="service-title">Fotovoltaico</div>
+      <div class="service-desc">Impianti fotovoltaici residenziali e industriali con sistemi di accumulo energetico per massima autonomia.</div>
+    </div>
+
+    <div class="service-image" id="svc-2">
+      <div class="img-3d" style="background:radial-gradient(circle,#0d1a1a,#000);--glow:#10b981;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">🏠</div>
+      </div>
+      <div class="service-name">Servizio 03</div>
+      <div class="service-title">Domotica</div>
+      <div class="service-desc">Sistemi domotici integrati per il controllo di luci, clima, sicurezza e automazioni da qualsiasi dispositivo.</div>
+    </div>
+
+    <div class="service-image" id="svc-3">
+      <div class="img-3d" style="background:radial-gradient(circle,#1a0d0d,#000);--glow:#ef4444;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">🛡️</div>
+      </div>
+      <div class="service-name">Servizio 04</div>
+      <div class="service-title">Sicurezza & TVCC</div>
+      <div class="service-desc">Sistemi di allarme, videosorveglianza TVCC e controllo accessi per abitazioni, uffici e capannoni.</div>
+    </div>
+
+    <div class="service-image" id="svc-4">
+      <div class="img-3d" style="background:radial-gradient(circle,#0d0d1a,#000);--glow:#8b5cf6;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">📡</div>
+      </div>
+      <div class="service-name">Servizio 05</div>
+      <div class="service-title">Antenne</div>
+      <div class="service-desc">Installazione di antenne digitali terrestri, satellitari e Sky. Installatori Sky autorizzati.</div>
+    </div>
+
+    <div class="service-image" id="svc-5">
+      <div class="img-3d" style="background:radial-gradient(circle,#1a0d00,#000);--glow:#f97316;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">🔥</div>
+      </div>
+      <div class="service-name">Servizio 06</div>
+      <div class="service-title">Antincendio</div>
+      <div class="service-desc">Progettazione e installazione di impianti di rilevazione incendio conformi alle normative CEI.</div>
+    </div>
+
+    <div class="service-image" id="svc-6">
+      <div class="img-3d" style="background:radial-gradient(circle,#001a1a,#000);--glow:#06b6d4;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">❄️</div>
+      </div>
+      <div class="service-name">Servizio 07</div>
+      <div class="service-title">Climatizzazione</div>
+      <div class="service-desc">Installazione e manutenzione di sistemi di condizionamento per residenziale, commerciale e industriale.</div>
+    </div>
+
+    <div class="service-image" id="svc-7">
+      <div class="img-3d" style="background:radial-gradient(circle,#001a0d,#000);--glow:#22c55e;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">🌐</div>
+      </div>
+      <div class="service-name">Servizio 08</div>
+      <div class="service-title">Reti Dati</div>
+      <div class="service-desc">Cablaggio strutturato, Wi-Fi professionale e infrastrutture in fibra ottica per ogni ambiente.</div>
+    </div>
+
+    <div class="service-image" id="svc-8">
+      <div class="img-3d" style="background:radial-gradient(circle,#1a1a00,#000);--glow:#eab308;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">⚙️</div>
+      </div>
+      <div class="service-name">Servizio 09</div>
+      <div class="service-title">Automazioni</div>
+      <div class="service-desc">Automazione di cancelli, barriere, tapparelle e controllo accessi, integrabile con domotica.</div>
+    </div>
+
+    <div class="service-image" id="svc-9">
+      <div class="img-3d" style="background:radial-gradient(circle,#0d001a,#000);--glow:#a78bfa;">
+        <div class="img-glow"></div>
+        <div class="img-3d-inner">🌩️</div>
+      </div>
+      <div class="service-name">Servizio 10</div>
+      <div class="service-title">Parafulmine</div>
+      <div class="service-desc">Progettazione e installazione di sistemi di protezione contro i fulmini (LPS). Verifiche CEI 81.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <strong>Nota sulle immagini 3D:</strong> in questo mockup uso emoji + glow come placeholder. Nel sito finale useremmo immagini 3D vere (render, foto premium, o oggetti Three.js). Vedi domanda sotto.
+</div>
+
+<script>
+function select(el, idx) {
+  document.querySelectorAll('.pill').forEach(p => {
+    p.classList.remove('active');
+    p.querySelector('.pill-icon').textContent = '+';
+  });
+  el.classList.add('active');
+  el.querySelector('.pill-icon').textContent = '−';
+
+  document.querySelectorAll('.service-image').forEach(s => s.classList.remove('visible'));
+  document.getElementById('svc-' + idx).classList.add('visible');
+}
+</script>
+</body>
+</html>

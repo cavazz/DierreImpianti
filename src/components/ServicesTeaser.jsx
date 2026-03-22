@@ -1,24 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import {
-  Zap, Sun, Radio, Home, Wind,
-  Network, Settings2, ShieldCheck, Flame, CloudLightning,
-  ArrowRight,
-} from 'lucide-react'
-
-const services = [
-  { icon: Zap,            title: 'Impianti Elettrici' },
-  { icon: Sun,            title: 'Fotovoltaico'        },
-  { icon: Home,           title: 'Domotica'            },
-  { icon: ShieldCheck,    title: 'Sicurezza & TVCC'    },
-  { icon: Radio,          title: 'Antenne'             },
-  { icon: Flame,          title: 'Antincendio'         },
-  { icon: Wind,           title: 'Climatizzazione'     },
-  { icon: Network,        title: 'Reti Dati'           },
-  { icon: Settings2,      title: 'Automazioni'         },
-  { icon: CloudLightning, title: 'Parafulmine'         },
-]
+import { ArrowRight } from 'lucide-react'
+import { SERVICES } from '../data/services'
 
 export default function ServicesTeaser() {
   const ref    = useRef(null)
@@ -59,7 +43,7 @@ export default function ServicesTeaser() {
           transition={{ duration: 0.55, delay: 0.18 }}
           className="flex flex-wrap gap-2 md:gap-2.5 mb-10 md:mb-12"
           aria-hidden="true">
-          {services.map((s) => {
+          {SERVICES.map((s) => {
             const Icon = s.icon
             return (
               <span
