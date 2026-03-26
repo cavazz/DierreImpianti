@@ -1,10 +1,14 @@
-import { useRef, useState, useId } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState, useId, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { Phone, Mail, MapPin, Send, CheckCircle, Clock, Loader2 } from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageBanner from './PageBanner'
 import TiltCard from './TiltCard'
 import { usePageMeta } from '../hooks/usePageMeta'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const inputCls = [
   'w-full px-4 py-3.5 rounded-lg text-sm font-sans',
@@ -34,9 +38,8 @@ const PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY
 const EMAILJS_OK  = SERVICE_ID && !SERVICE_ID.startsWith('service_xxx')
 
 export default function Contact() {
-  const uid    = useId()
-  const ref    = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const uid        = useId()
+  const pageRef    = useRef(null)
   const [sent, setSent]       = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
@@ -46,6 +49,23 @@ export default function Contact() {
     title: 'Contatti · Dierre Impianti | Preventivo Gratuito Padova',
     description: 'Richiedi un preventivo gratuito a Dierre Impianti. Impianti elettrici, fotovoltaico e domotica nella provincia di Padova. Risposta entro 24 ore.',
   })
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.from('.ct-left', {
+        opacity: 0, x: -24, duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ct-left', start: 'top 85%', once: true },
+      })
+      gsap.from('.ct-right', {
+        opacity: 0, x: 24, duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.ct-right', start: 'top 85%', once: true },
+      })
+    }, pageRef)
+
+    return () => ctx.revert()
+  }, [])
 
   const set = e => setForm(p => ({ ...p, [e.target.name]: e.target.value }))
 
@@ -74,7 +94,6 @@ export default function Contact() {
         setLoading(false)
       }
     } else {
-      // Fallback mailto se EmailJS non è configurato
       const subject = encodeURIComponent(`Richiesta preventivo da ${form.name}`)
       const body    = encodeURIComponent(
         `Nome: ${form.name}\nTelefono: ${form.phone || '—'}\nEmail: ${form.email}\n\nMessaggio:\n${form.message}`
@@ -86,7 +105,7 @@ export default function Contact() {
   }
 
   return (
-    <>
+    <div ref={pageRef}>
       <PageBanner
         label="Contatti"
         title={"Parliamo del tuo\nprossimo progetto."}
@@ -94,15 +113,12 @@ export default function Contact() {
       />
 
       <section id="contatti" aria-labelledby="contact-title" className="bg-dark">
-        <div ref={ref} className="container-xl section-pad">
+        <div className="container-xl section-pad">
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
 
             {/* ── Left: contact info ── */}
-            <motion.div
-              initial={{ opacity: 0, x: -24 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}>
-
+            <div className="ct-left">
               <span className="label mb-6">Scrivici o chiamaci</span>
               <h2 id="contact-title"
                 className="font-display font-black text-text-p leading-[1.05] tracking-[-0.035em] mb-10"
@@ -184,17 +200,13 @@ export default function Contact() {
                 </div>
                 <span className="text-text-s text-sm font-medium">Disponibile per nuovi lavori</span>
               </div>
-            </motion.div>
+            </div>
 
             {/* ── Right: form ── */}
-            <motion.div
-              initial={{ opacity: 0, x: 24 }} animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}>
-
+            <div className="ct-right">
               <div className="rounded-2xl p-7 md:p-10"
                 style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.025)' }}>
 
-                {/* gradient top-left corner accent */}
                 <div aria-hidden="true" className="absolute top-0 left-0 w-24 h-px pointer-events-none"
                   style={{ background: 'linear-gradient(90deg, rgba(245,196,48,0.5), transparent)' }}/>
                 <div aria-hidden="true" className="absolute top-0 left-0 h-16 w-px pointer-events-none"
@@ -266,10 +278,10 @@ export default function Contact() {
                   </form>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

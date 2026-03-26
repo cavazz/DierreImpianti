@@ -1,21 +1,33 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import { lazy, Suspense } from 'react'
 import Navbar          from './components/Navbar'
 import Hero            from './components/Hero'
 import ServicesTeaser  from './components/ServicesTeaser'
-import About           from './components/About'
-import Contact         from './components/Contact'
 import Footer          from './components/Footer'
 import CookieBanner    from './components/CookieBanner'
 import ScrollProgress  from './components/ScrollProgress'
 import Cursor          from './components/Cursor'
-import Privacy         from './pages/Privacy'
-import Cookie          from './pages/Cookie'
-import Accessibilita   from './pages/Accessibilita'
-import Servizi         from './pages/Servizi'
-import TerminiServizio from './pages/TerminiServizio'
-import NotFound        from './pages/NotFound'
 import { usePageMeta } from './hooks/usePageMeta'
+
+const About          = lazy(() => import('./components/About'))
+const Contact        = lazy(() => import('./components/Contact'))
+const Servizi        = lazy(() => import('./pages/Servizi'))
+const Privacy        = lazy(() => import('./pages/Privacy'))
+const Cookie         = lazy(() => import('./pages/Cookie'))
+const Accessibilita  = lazy(() => import('./pages/Accessibilita'))
+const TerminiServizio = lazy(() => import('./pages/TerminiServizio'))
+const NotFound       = lazy(() => import('./pages/NotFound'))
+
+function PageFallback() {
+  return (
+    <div className="min-h-screen bg-dark flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+      </div>
+    </div>
+  )
+}
 
 /* ── Page transition wrapper ────────────────────────── */
 function Page({ children }) {
@@ -42,19 +54,21 @@ function HomePage() {
 function AppRoutes() {
   const location = useLocation()
   return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/"              element={<HomePage />} />
-        <Route path="/servizi"       element={<Page><Servizi /></Page>} />
-        <Route path="/chi-siamo"     element={<Page><About /></Page>} />
-        <Route path="/contatti"      element={<Page><Contact /></Page>} />
-        <Route path="/privacy"       element={<Page><Privacy /></Page>} />
-        <Route path="/cookie"        element={<Page><Cookie /></Page>} />
-        <Route path="/accessibilita" element={<Page><Accessibilita /></Page>} />
-        <Route path="/termini"       element={<Page><TerminiServizio /></Page>} />
-        <Route path="*"              element={<Page><NotFound /></Page>} />
-      </Routes>
-    </AnimatePresence>
+    <Suspense fallback={<PageFallback />}>
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/"              element={<HomePage />} />
+          <Route path="/servizi"       element={<Page><Servizi /></Page>} />
+          <Route path="/chi-siamo"     element={<Page><About /></Page>} />
+          <Route path="/contatti"      element={<Page><Contact /></Page>} />
+          <Route path="/privacy"       element={<Page><Privacy /></Page>} />
+          <Route path="/cookie"        element={<Page><Cookie /></Page>} />
+          <Route path="/accessibilita" element={<Page><Accessibilita /></Page>} />
+          <Route path="/termini"       element={<Page><TerminiServizio /></Page>} />
+          <Route path="*"              element={<Page><NotFound /></Page>} />
+        </Routes>
+      </AnimatePresence>
+    </Suspense>
   )
 }
 

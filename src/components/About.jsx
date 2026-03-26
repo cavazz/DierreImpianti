@@ -1,10 +1,14 @@
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { MapPin, Phone, Mail, ShieldCheck, BadgeCheck, Zap, ClipboardCheck, Star, Headphones, ArrowUpRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import PageBanner from './PageBanner'
 import TiltCard from './TiltCard'
 import { usePageMeta } from '../hooks/usePageMeta'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const stats = [
   { n: '20+',  label: 'Anni di esperienza',   note: 'Dal 2003 nel settore' },
@@ -16,9 +20,9 @@ const stats = [
 const values = [
   { icon: ShieldCheck,    title: 'Certificati e qualificati', desc: 'Installatori con abilitazioni e certificazioni aggiornate, sempre conformi alla normativa.' },
   { icon: BadgeCheck,     title: 'Garanzia totale',           desc: 'Ogni lavoro eseguito è coperto da garanzia completa su materiali e manodopera.' },
-  { icon: Zap,            title: 'Interventi rapidi',         desc: 'Puntualità e risposta veloce. Ogni richiesta viene gestita con massima priorità.' },
-  { icon: ClipboardCheck, title: 'Conformità normativa',      desc: 'Rispetto rigoroso di tutte le normative CEI vigenti su ogni tipologia di impianto.' },
-  { icon: Star,           title: 'Materiali di qualità',      desc: 'Solo prodotti certificati di prima scelta da fornitori selezionati.' },
+  { icon: Zap,            title: 'Interventi rapidi',         desc: 'Rispondiamo entro poche ore e organizziamo l\'intervento velocemente. Per le urgenze, facciamo il possibile per essere lì al più presto.' },
+  { icon: ClipboardCheck, title: 'Conformità normativa',      desc: 'Ogni impianto viene realizzato nel rispetto delle normative CEI vigenti. Rilasciamo la dichiarazione di conformità per ogni lavoro eseguito.' },
+  { icon: Star,           title: 'Materiali di qualità',      desc: 'Utilizziamo solo prodotti certificati dei marchi che conosciamo e di cui ci fidiamo. Un buon impianto dipende anche dai componenti usati.' },
   { icon: Headphones,     title: 'Assistenza post-vendita',   desc: 'Supporto tecnico continuativo dopo ogni intervento. Non ti lasciamo mai solo.' },
 ]
 
@@ -27,16 +31,76 @@ export default function About() {
     title: 'Chi Siamo · Dierre Impianti | Dal 2003 a Padova',
     description: 'Dierre Impianti di Dainese Roberto: oltre 20 anni di esperienza in impianti elettrici e tecnologici nella provincia di Padova. Affidabilità, qualità certificata e 500+ progetti realizzati.',
   })
-  const storyRef = useRef(null)
-  const valRef   = useRef(null)
-  const ctaRef   = useRef(null)
-  const storyIn  = useInView(storyRef, { once: true, margin: '-60px' })
-  const valIn    = useInView(valRef,   { once: true, margin: '-60px' })
-  const ctaIn    = useInView(ctaRef,   { once: true, margin: '-60px' })
+
+  const pageRef  = useRef(null)
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+
+      // Stats strip — stagger from bottom
+      gsap.from('.abt-stat', {
+        opacity: 0, y: 20, duration: 0.55,
+        ease: 'power2.out', stagger: 0.09,
+        scrollTrigger: { trigger: '.abt-stats', start: 'top 88%', once: true },
+      })
+
+      // Feature statement
+      gsap.from('.abt-feat', {
+        opacity: 0, y: 36, duration: 0.9,
+        ease: 'expo.out',
+        scrollTrigger: { trigger: '.abt-feat', start: 'top 85%', once: true },
+      })
+
+      // Accent line
+      gsap.from('.abt-sep', {
+        scaleX: 0, duration: 1.1,
+        ease: 'expo.out', transformOrigin: 'center',
+        scrollTrigger: { trigger: '.abt-sep', start: 'top 92%', once: true },
+      })
+
+      // Story — left column
+      gsap.from('.abt-story-l', {
+        opacity: 0, x: -28, duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.abt-story-l', start: 'top 85%', once: true },
+      })
+
+      // Story — right column
+      gsap.from('.abt-story-r', {
+        opacity: 0, x: 28, duration: 0.8,
+        ease: 'power3.out',
+        scrollTrigger: { trigger: '.abt-story-r', start: 'top 85%', once: true },
+      })
+
+      // Values header
+      gsap.from('.abt-val-hd', {
+        opacity: 0, y: 24, duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '.abt-val-hd', start: 'top 87%', once: true },
+      })
+
+      // Value cards — stagger
+      gsap.from('.abt-val-card', {
+        opacity: 0, y: 24, duration: 0.55,
+        ease: 'power2.out', stagger: 0.07,
+        scrollTrigger: { trigger: '.abt-val-grid', start: 'top 85%', once: true },
+      })
+
+      // CTA band
+      gsap.from('.abt-cta', {
+        opacity: 0, y: 24, duration: 0.7,
+        ease: 'power2.out',
+        scrollTrigger: { trigger: '.abt-cta', start: 'top 88%', once: true },
+      })
+
+    }, pageRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
-    <>
+    <div ref={pageRef}>
       <PageBanner
         label="Chi Siamo"
         title={"Professionalità\ndal 2003."}
@@ -46,14 +110,11 @@ export default function About() {
       {/* ── Stats strip ── */}
       <section aria-label="Numeri aziendali" className="bg-dark border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="container-xl py-12">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-0 divide-x" style={{ '--tw-divide-opacity': 1, borderColor: 'rgba(255,255,255,0.06)' }}>
+          <div className="abt-stats grid grid-cols-2 lg:grid-cols-4 gap-0">
             {stats.map((s, i) => (
-              <motion.div
+              <div
                 key={s.label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: i * 0.09 }}
-                className="text-center px-6 py-2"
+                className="abt-stat text-center px-6 py-2"
                 style={i > 0 ? { borderLeft: '1px solid rgba(255,255,255,0.06)' } : {}}
               >
                 <p className="font-display font-black leading-none mb-1 gradient-text"
@@ -62,20 +123,16 @@ export default function About() {
                 </p>
                 <p className="text-text-p text-[0.8125rem] font-semibold mb-0.5">{s.label}</p>
                 <p className="text-text-xs text-[11px]">{s.note}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── Feature statement (Apple large-type) ── */}
+      {/* ── Feature statement ── */}
       <section className="bg-bg overflow-hidden">
         <div className="container-xl py-24 md:py-36 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
+          <div className="abt-feat">
             <span className="section-label mb-10">La nostra filosofia</span>
             <h2
               className="font-display font-black text-text-p mx-auto leading-[1.0] tracking-[-0.04em]"
@@ -87,17 +144,14 @@ export default function About() {
             </h2>
             <p className="text-text-s mt-8 mx-auto leading-relaxed"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.2rem)', maxWidth: '56ch' }}>
-              Non installiamo soltanto cavi e componenti. Costruiamo infrastrutture tecnologiche
-              che resistono al tempo, rispettano le normative e superano le aspettative.
+              Non è solo questione di cavi e quadri elettrici. Un impianto fatto bene deve durare
+              nel tempo, essere sicuro e rispettare le normative — senza che tu debba pensarci.
             </p>
-          </motion.div>
+          </div>
 
-          {/* Floating accent line */}
-          <motion.div
-            initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
-            transition={{ duration: 1.1, delay: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+          <div
             aria-hidden="true"
-            className="mx-auto mt-16 h-px"
+            className="abt-sep mx-auto mt-16 h-px"
             style={{
               maxWidth: 320,
               background: 'linear-gradient(90deg, transparent, #f5c430, #38bdf8, transparent)',
@@ -109,14 +163,11 @@ export default function About() {
 
       {/* ── Storia + Contatti ── */}
       <section id="chi-siamo" aria-labelledby="about-title" className="bg-dark">
-        <div ref={storyRef} className="container-xl section-pad">
+        <div className="container-xl section-pad">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-start">
 
             {/* ── Sinistra: storia ── */}
-            <motion.div
-              initial={{ opacity: 0, x: -28 }} animate={storyIn ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}>
-
+            <div className="abt-story-l">
               <span className="label mb-6">La nostra storia</span>
 
               <h2 id="about-title"
@@ -145,7 +196,6 @@ export default function About() {
                 strength={10}
               >
                 <div className="relative z-10 flex items-center gap-5">
-                  {/* Avatar */}
                   <div
                     className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 font-display font-black text-dark text-lg select-none"
                     style={{ background: 'linear-gradient(135deg, #f5c430 0%, #38bdf8 100%)' }}
@@ -158,7 +208,6 @@ export default function About() {
                     <p className="text-text-xs text-[11px] font-mono mt-1">Dal 2003</p>
                   </div>
                 </div>
-                {/* subtle bg glow at bottom-right */}
                 <div aria-hidden="true" className="absolute -bottom-6 -right-6 w-32 h-32 rounded-full pointer-events-none"
                   style={{ background: 'radial-gradient(circle, rgba(56,189,248,0.12) 0%, transparent 70%)' }}/>
               </TiltCard>
@@ -169,13 +218,10 @@ export default function About() {
                 Richiedi un preventivo
                 <ArrowUpRight size={15} aria-hidden="true"/>
               </button>
-            </motion.div>
+            </div>
 
             {/* ── Destra: dati + contatti + orari ── */}
-            <motion.div
-              initial={{ opacity: 0, x: 28 }} animate={storyIn ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="lg:sticky lg:top-24 flex flex-col gap-0">
+            <div className="abt-story-r lg:sticky lg:top-24 flex flex-col gap-0">
 
               {/* Dati aziendali */}
               <div className="pb-8 mb-8 border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
@@ -248,42 +294,33 @@ export default function About() {
                 </div>
                 <span className="text-text-s text-xs font-medium">Disponibile per nuovi lavori</span>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* ── Valori — 3D tilt grid ── */}
-      <section ref={valRef} className="bg-bg" aria-label="I nostri valori">
+      {/* ── Valori ── */}
+      <section className="bg-bg" aria-label="I nostri valori">
         <div className="container-xl section-pad-sm">
 
-          <motion.div
-            initial={{ opacity: 0, y: 24 }} animate={valIn ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
-            className="text-center mb-14">
+          <div className="abt-val-hd text-center mb-14">
             <span className="section-label">Perché sceglierci</span>
             <h2 className="font-display font-black text-text-p leading-[1.05] tracking-[-0.03em]"
               style={{ fontSize: 'clamp(2rem, 4.5vw, 3.4rem)' }}>
               Il nostro impegno<br/>
               <span className="gradient-text">verso di te.</span>
             </h2>
-          </motion.div>
+          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-            {values.map(({ icon: Icon, title, desc }, i) => (
-              <motion.div
-                key={title}
-                initial={{ opacity: 0, y: 24 }}
-                animate={valIn ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.55, delay: i * 0.07 }}
-              >
+          <div className="abt-val-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            {values.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="abt-val-card">
                 <TiltCard
                   className="group relative p-6 rounded-2xl h-full overflow-hidden cursor-default"
                   style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.025)' }}
                   strength={12}
                 >
                   <div className="relative z-10">
-                    {/* Gradient icon badge */}
                     <div className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 relative overflow-hidden"
                       style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
                       <div aria-hidden="true" className="absolute inset-0"
@@ -293,28 +330,24 @@ export default function About() {
                     <h3 className="font-display font-700 text-text-p text-sm leading-tight mb-2">{title}</h3>
                     <p className="text-text-s text-xs leading-relaxed">{desc}</p>
                   </div>
-                  {/* corner accent line */}
                   <div aria-hidden="true" className="absolute top-0 left-0 w-16 h-px"
                     style={{ background: 'linear-gradient(90deg, rgba(245,196,48,0.5), transparent)' }}/>
                   <div aria-hidden="true" className="absolute top-0 left-0 h-12 w-px"
                     style={{ background: 'linear-gradient(180deg, rgba(245,196,48,0.5), transparent)' }}/>
                 </TiltCard>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
       {/* ── CTA band ── */}
-      <section ref={ctaRef} className="bg-dark" aria-label="Chiamata all'azione">
+      <section className="bg-dark" aria-label="Chiamata all'azione">
         <div className="container-xl py-20 md:py-28">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }} animate={ctaIn ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
-            className="relative rounded-3xl overflow-hidden"
+          <div
+            className="abt-cta relative rounded-3xl overflow-hidden"
             style={{ background: 'linear-gradient(135deg, rgba(245,196,48,0.08) 0%, rgba(56,189,248,0.08) 100%)', border: '1px solid rgba(255,255,255,0.07)' }}>
 
-            {/* Glow blobs */}
             <div aria-hidden="true" className="absolute -top-24 -left-16 w-72 h-72 rounded-full pointer-events-none"
               style={{ background: 'radial-gradient(circle, rgba(245,196,48,0.12) 0%, transparent 70%)' }}/>
             <div aria-hidden="true" className="absolute -bottom-20 -right-16 w-72 h-72 rounded-full pointer-events-none"
@@ -343,9 +376,9 @@ export default function About() {
                 </a>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }
