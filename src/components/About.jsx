@@ -30,6 +30,7 @@ export default function About() {
   usePageMeta({
     title: 'Chi Siamo · Dierre Impianti | Dal 2003 a Padova',
     description: 'Dierre Impianti di Dainese Roberto: oltre 20 anni di esperienza in impianti elettrici e tecnologici nella provincia di Padova. Affidabilità, qualità certificata e 500+ progetti realizzati.',
+    path: '/chi-siamo',
   })
 
   const pageRef  = useRef(null)

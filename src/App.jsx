@@ -19,11 +19,42 @@ const Accessibilita  = lazy(() => import('./pages/Accessibilita'))
 const TerminiServizio = lazy(() => import('./pages/TerminiServizio'))
 const NotFound       = lazy(() => import('./pages/NotFound'))
 
+function SkeletonBlock({ className = '' }) {
+  return (
+    <div
+      className={`rounded-lg bg-white/[0.04] relative overflow-hidden ${className}`}
+      aria-hidden="true"
+    >
+      <div className="absolute inset-0 -translate-x-full animate-[shimmer_1.6s_infinite] bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+    </div>
+  )
+}
+
 function PageFallback() {
   return (
-    <div className="min-h-screen bg-dark flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+    <div className="min-h-screen bg-dark pt-24 pb-16 px-5 md:px-12" aria-hidden="true">
+      {/* Hero skeleton */}
+      <div className="max-w-4xl mx-auto pt-20 mb-20 space-y-5">
+        <SkeletonBlock className="h-4 w-24 mb-8" />
+        <SkeletonBlock className="h-14 w-3/4" />
+        <SkeletonBlock className="h-14 w-1/2" />
+        <SkeletonBlock className="h-5 w-full max-w-lg mt-6" />
+        <SkeletonBlock className="h-5 w-4/5 max-w-lg" />
+        <div className="flex gap-3 pt-4">
+          <SkeletonBlock className="h-12 w-40 rounded-full" />
+          <SkeletonBlock className="h-12 w-32 rounded-full" />
+        </div>
+      </div>
+      {/* Cards skeleton */}
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="rounded-2xl border border-white/[0.06] p-6 space-y-4">
+            <SkeletonBlock className="h-10 w-10 rounded-xl" />
+            <SkeletonBlock className="h-5 w-2/3" />
+            <SkeletonBlock className="h-4 w-full" />
+            <SkeletonBlock className="h-4 w-4/5" />
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -46,6 +77,7 @@ function HomePage() {
   usePageMeta({
     title: 'Dierre Impianti | Impianti Elettrici · Padova',
     description: 'Dierre Impianti - Impianti elettrici, fotovoltaico, domotica, antenne, climatizzazione, reti dati e automazioni. Oltre 20 anni di esperienza nella provincia di Padova.',
+    path: '/',
   })
   return <Page><Hero /><ServicesTeaser /></Page>
 }

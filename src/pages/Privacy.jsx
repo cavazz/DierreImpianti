@@ -16,6 +16,7 @@ export default function Privacy() {
   usePageMeta({
     title: 'Privacy Policy · Dierre Impianti',
     description: 'Informativa sulla privacy di Dierre Impianti. Scopri come trattiamo i tuoi dati personali nel rispetto del GDPR.',
+    path: '/privacy',
   })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 

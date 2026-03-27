@@ -1,0 +1,64 @@
+# ─── SPA Routing ─────────────────────────────────────────────────────────────
+Options -MultiViews
+RewriteEngine On
+RewriteBase /
+
+# Non riscrivere file e cartelle esistenti
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+# Tutte le richieste → index.html (React Router gestisce il routing)
+RewriteRule ^ index.html [QSA,L]
+
+# ─── HTTPS redirect ──────────────────────────────────────────────────────────
+RewriteCond %{HTTPS} off
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ─── www redirect ────────────────────────────────────────────────────────────
+RewriteCond %{HTTP_HOST} !^www\. [NC]
+RewriteRule ^ https://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# ─── Cache static assets ─────────────────────────────────────────────────────
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/svg+xml        "access plus 1 year"
+  ExpiresByType image/png            "access plus 1 year"
+  ExpiresByType image/jpeg           "access plus 1 year"
+  ExpiresByType image/webp           "access plus 1 year"
+  ExpiresByType image/gif            "access plus 1 year"
+  ExpiresByType video/mp4            "access plus 6 months"
+  ExpiresByType text/css             "access plus 6 months"
+  ExpiresByType application/javascript "access plus 6 months"
+  ExpiresByType application/json     "access plus 1 day"
+  ExpiresByType text/html            "access plus 0 seconds"
+</IfModule>
+
+# ─── Gzip compression ────────────────────────────────────────────────────────
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE application/manifest+json
+</IfModule>
+
+# ─── Security headers ────────────────────────────────────────────────────────
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # Cache-Control per gli asset con hash nel nome (Vite)
+  <FilesMatch "\.(js|css|woff2|svg|png|jpg|jpeg|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # HTML sempre rivalidato
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+# ─── Protect .env files ───────────────────────────────────────────────────────
+<FilesMatch "^\.env">
+  Order allow,deny
+  Deny from all
+</FilesMatch>

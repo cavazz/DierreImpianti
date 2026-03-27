@@ -7,6 +7,7 @@ export default function Servizi() {
   usePageMeta({
     title: 'Servizi · Dierre Impianti | Elettrico, Fotovoltaico, Domotica Padova',
     description: 'Impianti elettrici, fotovoltaico, domotica, antenne, reti dati, automazioni e parafulmine. Servizi professionali nella provincia di Padova.',
+    path: '/servizi',
   })
   return (
     <>

@@ -33,6 +33,7 @@ export default function Accessibilita() {
   usePageMeta({
     title: 'Accessibilità · Dierre Impianti',
     description: 'Dichiarazione di accessibilità del sito web di Dierre Impianti. Conformità WCAG 2.1 Livello AA.',
+    path: '/accessibilita',
   })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 

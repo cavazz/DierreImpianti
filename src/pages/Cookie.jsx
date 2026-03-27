@@ -15,6 +15,7 @@ export default function Cookie() {
   usePageMeta({
     title: 'Cookie Policy · Dierre Impianti',
     description: 'Informativa sui cookie di Dierre Impianti. Scopri quali cookie utilizziamo e come gestire le tue preferenze.',
+    path: '/cookie',
   })
   useEffect(() => { window.scrollTo(0, 0) }, [])
 

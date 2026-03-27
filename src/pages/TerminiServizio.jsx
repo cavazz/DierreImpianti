@@ -15,6 +15,7 @@ export default function TerminiServizio() {
   usePageMeta({
     title: 'Termini di Servizio · Dierre Impianti',
     description: 'Termini e condizioni di utilizzo del sito web di Dierre Impianti di Dainese Roberto.',
+    path: '/termini',
   })
 
   useEffect(() => { window.scrollTo(0, 0) }, [])

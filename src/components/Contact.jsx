@@ -48,6 +48,7 @@ export default function Contact() {
   usePageMeta({
     title: 'Contatti · Dierre Impianti | Preventivo Gratuito Padova',
     description: 'Richiedi un preventivo gratuito a Dierre Impianti. Impianti elettrici, fotovoltaico e domotica nella provincia di Padova. Risposta entro 24 ore.',
+    path: '/contatti',
   })
 
   useEffect(() => {
