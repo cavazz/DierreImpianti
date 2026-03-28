@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useState } from 'react'
+import SplashScreen    from './components/SplashScreen'
 import Navbar          from './components/Navbar'
 import Hero            from './components/Hero'
 import ServicesTeaser  from './components/ServicesTeaser'
@@ -106,8 +107,11 @@ function AppRoutes() {
 
 /* ── App ─────────────────────────────────────────────── */
 export default function App() {
+  const [splashDone, setSplashDone] = useState(false)
+
   return (
     <BrowserRouter>
+      {!splashDone && <SplashScreen onDone={() => setSplashDone(true)} />}
       <ScrollProgress />
       <Cursor />
       <Navbar />
