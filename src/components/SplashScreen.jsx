@@ -1,18 +1,20 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 
 const logoImg = "/logo-white.png";
 const EXPO    = [0.16, 1, 0.3, 1];
 
-/* Stesso gradiente del btn-primary del sito: #f5c430 → #38bdf8 */
 const GRAD = "linear-gradient(90deg, #f5c430 0%, #38bdf8 100%)";
 
 /* ── Batteria orizzontale ── */
 function Battery({ pctMV }) {
-  /* Tutti i valori derivano dallo stesso MotionValue → sync perfetto */
-  const maskWidth    = useTransform(pctMV, v => `${100 - v}%`);
-  const glowLeft     = useTransform(pctMV, v => `${Math.max(0, v - 8)}%`);
-  const glowOpacity  = useTransform(pctMV, v => v >= 95 ? 0 : 1);
+  const containerRadius = "clamp(6px, 1.5vw, 9px)";
+
+  // Animazione accelerata via GPU che mantiene l'arrotondamento perfetto
+  const clipPathMV = useTransform(pctMV, v => {
+    return `inset(0 ${100 - v}% 0 0 round ${containerRadius})`;
+  });
+
   const terminalBg   = useTransform(pctMV, v => v >= 99.5 ? "#38bdf8" : "#2a3d54");
   const boltFill     = useTransform(pctMV, v => v > 50 ? "#0d1520" : "#8aa4c0");
 
@@ -24,33 +26,22 @@ function Battery({ pctMV }) {
         width:        "clamp(160px, 42vw, 240px)",
         height:       "clamp(36px,  9vw,  52px)",
         border:       "1.5px solid #2a3d54",
-        borderRadius: "clamp(6px, 1.5vw, 9px)",
+        borderRadius: containerRadius,
         background:   "#1a2436",
         position:     "relative",
         overflow:     "hidden",
+        // Evita artefatti visivi durante il ridimensionamento
+        transform:    "translateZ(0)",
       }}>
 
-        {/* Gradiente sempre full-width */}
-        <div style={{ position: "absolute", inset: 0, background: GRAD }} />
-
-        {/* Glow sul bordo avanzante */}
+        {/* Gradiente di riempimento */}
         <motion.div style={{
           position: "absolute",
-          top: 0, bottom: 0,
-          left:    glowLeft,
-          width:   "14%",
-          background:   "rgba(255,255,255,0.25)",
-          filter:       "blur(6px)",
-          opacity:      glowOpacity,
-          pointerEvents: "none",
-        }} />
-
-        {/* Maschera che si ritira da destra */}
-        <motion.div style={{
-          position: "absolute",
-          top: 0, right: 0, bottom: 0,
-          width:      maskWidth,
-          background: "#1a2436",
+          inset: 0,
+          background: GRAD,
+          clipPath: clipPathMV,
+          // Suggerisce al browser di ottimizzare questa specifica animazione sulla GPU
+          willChange: "clip-path",
         }} />
 
         {/* Divisori verticali */}
@@ -98,17 +89,14 @@ function Battery({ pctMV }) {
 ══════════════════════════════════════════ */
 export default function SplashScreen({ onDone }) {
   const pctMV        = useMotionValue(0);
-  const numRef       = useRef(null);
+  
+  const formattedPct = useTransform(pctMV, v => String(Math.floor(v)).padStart(2, "0"));
+  
   const [exiting, setEx] = useState(false);
   const [lit, setLit]    = useState(false);
 
   useEffect(() => {
     const tLit = setTimeout(() => setLit(true), 420);
-
-    /* Aggiorna il DOM direttamente — stesso frame della batteria, zero ritardo */
-    const unsub = pctMV.on("change", v => {
-      if (numRef.current) numRef.current.textContent = String(Math.floor(v)).padStart(2, "0");
-    });
 
     /* Precarica logo */
     let logoReady = false;
@@ -140,10 +128,9 @@ export default function SplashScreen({ onDone }) {
 
     return () => {
       ctrl?.stop?.();
-      unsub();
       clearTimeout(tLit);
     };
-  }, []);
+  }, [pctMV, onDone]);
 
   return (
     <AnimatePresence>
@@ -218,7 +205,7 @@ export default function SplashScreen({ onDone }) {
               <Battery pctMV={pctMV} />
             </motion.div>
 
-            {/* Percentuale — aggiornata dallo stesso MotionValue */}
+            {/* Percentuale */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -228,7 +215,7 @@ export default function SplashScreen({ onDone }) {
                 display: "flex", alignItems: "baseline", gap: 2,
               }}
             >
-              <span ref={numRef} style={{
+              <motion.span style={{
                 fontSize: "clamp(26px, 7vw, 42px)",
                 fontWeight: 800,
                 fontFamily: "'Poppins', system-ui, sans-serif",
@@ -239,8 +226,8 @@ export default function SplashScreen({ onDone }) {
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-                00
-              </span>
+                {formattedPct}
+              </motion.span>
               <span style={{
                 fontSize: "clamp(12px, 3vw, 18px)",
                 fontWeight: 600,
