@@ -1,41 +1,148 @@
-import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 
-const logoImg = "/logo.png";
+const logoImg = "/logo-white.png";
+const EXPO    = [0.16, 1, 0.3, 1];
 
+/* Stesso gradiente del btn-primary del sito: #f5c430 → #38bdf8 */
+const GRAD = "linear-gradient(90deg, #f5c430 0%, #38bdf8 100%)";
+
+/* ── Batteria orizzontale ── */
+function Battery({ pctMV }) {
+  /* Tutti i valori derivano dallo stesso MotionValue → sync perfetto */
+  const maskWidth    = useTransform(pctMV, v => `${100 - v}%`);
+  const glowLeft     = useTransform(pctMV, v => `${Math.max(0, v - 8)}%`);
+  const glowOpacity  = useTransform(pctMV, v => v >= 95 ? 0 : 1);
+  const terminalBg   = useTransform(pctMV, v => v >= 99.5 ? "#38bdf8" : "#2a3d54");
+  const boltFill     = useTransform(pctMV, v => v > 50 ? "#0d1520" : "#8aa4c0");
+
+  return (
+    <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+
+      {/* Corpo */}
+      <div style={{
+        width:        "clamp(160px, 42vw, 240px)",
+        height:       "clamp(36px,  9vw,  52px)",
+        border:       "1.5px solid #2a3d54",
+        borderRadius: "clamp(6px, 1.5vw, 9px)",
+        background:   "#1a2436",
+        position:     "relative",
+        overflow:     "hidden",
+      }}>
+
+        {/* Gradiente sempre full-width */}
+        <div style={{ position: "absolute", inset: 0, background: GRAD }} />
+
+        {/* Glow sul bordo avanzante */}
+        <motion.div style={{
+          position: "absolute",
+          top: 0, bottom: 0,
+          left:    glowLeft,
+          width:   "14%",
+          background:   "rgba(255,255,255,0.25)",
+          filter:       "blur(6px)",
+          opacity:      glowOpacity,
+          pointerEvents: "none",
+        }} />
+
+        {/* Maschera che si ritira da destra */}
+        <motion.div style={{
+          position: "absolute",
+          top: 0, right: 0, bottom: 0,
+          width:      maskWidth,
+          background: "#1a2436",
+        }} />
+
+        {/* Divisori verticali */}
+        {[0.33, 0.66].map(t => (
+          <div key={t} style={{
+            position: "absolute",
+            left: `${t * 100}%`,
+            top: 0, bottom: 0,
+            width: 1,
+            background: "#0d1520",
+            zIndex: 1,
+          }} />
+        ))}
+
+        {/* Fulmine */}
+        <div style={{
+          position: "absolute", inset: 0,
+          display: "flex", alignItems: "center", justifyContent: "center",
+          zIndex: 2,
+        }}>
+          <svg viewBox="0 0 24 40" style={{ width: "clamp(12px, 3vw, 17px)", height: "auto" }}>
+            <motion.path
+              d="M 15,1 L 4,22 L 11,22 L 9,39 L 20,18 L 13,18 Z"
+              style={{ fill: boltFill }}
+            />
+          </svg>
+        </div>
+
+      </div>
+
+      {/* Terminale destro */}
+      <motion.div style={{
+        width:        "clamp(5px, 1.4vw, 7px)",
+        height:       "clamp(14px, 3.5vw, 20px)",
+        background:   terminalBg,
+        borderRadius: "0 3px 3px 0",
+      }} />
+
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   SPLASH SCREEN
+══════════════════════════════════════════ */
 export default function SplashScreen({ onDone }) {
-  const [pct,     setPct]     = useState(0);
-  const [exiting, setExiting] = useState(false);
+  const pctMV        = useMotionValue(0);
+  const numRef       = useRef(null);
+  const [exiting, setEx] = useState(false);
+  const [lit, setLit]    = useState(false);
 
   useEffect(() => {
-    let logoReady = false;
+    const tLit = setTimeout(() => setLit(true), 420);
 
-    new Promise(res => {
+    /* Aggiorna il DOM direttamente — stesso frame della batteria, zero ritardo */
+    const unsub = pctMV.on("change", v => {
+      if (numRef.current) numRef.current.textContent = String(Math.floor(v)).padStart(2, "0");
+    });
+
+    /* Precarica logo */
+    let logoReady = false;
+    const logoPromise = new Promise(res => {
       const img = new Image();
       img.onload = img.onerror = res;
       img.src = logoImg;
     }).then(() => { logoReady = true; });
 
-    const timer = setInterval(() => {
-      setPct(prev => {
-        if (prev >= 75 && !logoReady) return prev;
+    /* Fase 1 — 0 → 75 in ~2.2s */
+    let ctrl;
+    ctrl = animate(pctMV, 75, {
+      duration: 2.2,
+      ease: "linear",
+      onComplete: () => {
+        /* Fase 2 — 75 → 100 dopo che il logo è pronto */
+        const run2 = () => {
+          ctrl = animate(pctMV, 100, {
+            duration: 0.9,
+            ease: [0.4, 0, 0.2, 1],
+            onComplete: () => {
+              setTimeout(() => { setEx(true); setTimeout(onDone, 800); }, 700);
+            },
+          });
+        };
+        logoReady ? run2() : logoPromise.then(run2);
+      },
+    });
 
-        const next = prev + 1;
-
-        if (next >= 100) {
-          clearInterval(timer);
-          setTimeout(() => {
-            setExiting(true);
-            setTimeout(onDone, 700);
-          }, 900);
-          return 100;
-        }
-
-        return next;
-      });
-    }, 35);
-
-    return () => clearInterval(timer);
+    return () => {
+      ctrl?.stop?.();
+      unsub();
+      clearTimeout(tLit);
+    };
   }, []);
 
   return (
@@ -43,175 +150,110 @@ export default function SplashScreen({ onDone }) {
       {!exiting && (
         <motion.div
           key="splash"
-          exit={{ scale: 18, opacity: 0 }}
-          transition={{ duration: 0.5, ease: [0.55, 0, 1, 0.45] }}
-          originX={0.5}
-          originY={0.5}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.75, ease: "easeInOut" }}
           style={{
-            position: "fixed",
-            top: 0, left: 0, right: 0, bottom: 0,
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-            userSelect: "none",
-            background: "linear-gradient(160deg, #0a1220 0%, #0d1520 55%, #0f1828 100%)",
-            willChange: "transform, opacity",
+            position: "fixed", inset: 0, zIndex: 9999,
+            display: "flex", flexDirection: "column",
+            alignItems: "center", justifyContent: "center",
+            background: "#0d1520",
+            userSelect: "none", overflow: "hidden",
+            paddingTop:    "env(safe-area-inset-top)",
+            paddingBottom: "env(safe-area-inset-bottom)",
           }}
         >
 
-          {/* Ambient glows */}
-          <div style={{
-            position: "absolute", pointerEvents: "none",
-            top: "-15%", left: "-10%", width: "55vw", height: "55vw", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(56,189,248,0.18) 0%, transparent 60%)",
-          }} />
-          <div style={{
-            position: "absolute", pointerEvents: "none",
-            bottom: "-12%", right: "-8%", width: "48vw", height: "48vw", borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(14,165,233,0.12) 0%, transparent 60%)",
+          {/* Grain */}
+          <div aria-hidden style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            opacity: 0.03, mixBlendMode: "overlay",
           }} />
 
-          {/* Contenuto */}
-          <motion.div
-            style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-            initial={{ opacity: 0, y: 20, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0,  scale: 1    }}
-            transition={{ duration: 0.6, ease: [0.34, 1.1, 0.64, 1] }}
-          >
+          {/* Glow blu in alto */}
+          <div aria-hidden style={{
+            position: "absolute", inset: 0, pointerEvents: "none",
+            background: "radial-gradient(ellipse 90% 50% at 50% 0%, rgba(56,189,248,0.09) 0%, transparent 60%)",
+          }} />
+
+          {/* ── Centro ── */}
+          <div style={{
+            display: "flex", flexDirection: "column",
+            alignItems: "center", position: "relative", zIndex: 1,
+            gap: 0,
+          }}>
 
             {/* Logo */}
-            <div style={{
-              position: "relative",
-              width: "min(260px, 52vw)",
-              height: "min(260px, 52vw)",
-              marginBottom: "clamp(24px, 6vw, 48px)",
-            }}>
-
-              {/* Glow pulsante */}
-              <motion.div
-                style={{
-                  position: "absolute",
-                  top: "-30%", left: "-30%", right: "-30%", bottom: "-30%",
-                  borderRadius: "50%",
-                  background: "radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 65%)",
-                  pointerEvents: "none",
-                }}
-                animate={{ scale: [1, 1.14, 1], opacity: [0.4, 0.75, 0.4] }}
-                transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-              />
-
-              {/* Logo grigio base */}
-              <img
-                src={logoImg}
-                alt=""
-                draggable={false}
-                style={{
-                  position: "absolute", inset: 0,
-                  width: "100%", height: "100%",
-                  objectFit: "fill",
-                  filter: "grayscale(1) brightness(0.3)",
-                }}
-              />
-
-              {/* Logo a colori — reveal dal basso verso l'alto */}
+            <motion.div
+              style={{ marginBottom: "clamp(24px, 5.5vw, 40px)", display: "flex" }}
+              animate={lit
+                ? { opacity: 1, scale: 1 }
+                : { opacity: [0, 0.7, 0.12, 1, 0.42, 1], scale: [0.94, 1, 0.97, 1] }
+              }
+              initial={{ opacity: 0, scale: 0.94 }}
+              transition={lit
+                ? { duration: 0.2, ease: "easeOut" }
+                : { duration: 0.44, ease: "easeOut", times: [0, 0.13, 0.3, 0.58, 0.76, 1] }
+              }
+            >
               <img
                 src={logoImg}
                 alt="Dierre Impianti"
                 draggable={false}
                 style={{
-                  position: "absolute", inset: 0,
-                  width: "100%", height: "100%",
-                  objectFit: "fill",
-                  clipPath: `inset(${Math.max(0, 100 - pct * 0.9)}% 0 0 0)`,
+                  display: "block",
+                  width:  "clamp(180px, 46vw, 280px)",
+                  height: "clamp(180px, 46vw, 280px)",
+                  objectFit: "contain",
                 }}
               />
+            </motion.div>
 
-            </div>
-
-            {/* Percentuale */}
+            {/* Batteria */}
             <motion.div
-              style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
+              transition={{ delay: 0.44, duration: 0.6, ease: EXPO }}
             >
-              {/* Label sistema */}
-              <span style={{
-                fontSize: 10,
-                fontWeight: 500,
-                fontFamily: "'Clash Display', sans-serif",
-                letterSpacing: "0.28em",
-                color: "#1e3a5f",
-                textTransform: "uppercase",
-                marginBottom: 4,
-              }}>
-                Avvio sistema
-              </span>
+              <Battery pctMV={pctMV} />
+            </motion.div>
 
-              {/* Numero + % */}
-              <div style={{
-                display: "flex", alignItems: "flex-start", lineHeight: 1,
-                background: "linear-gradient(90deg, #38bdf8, #e0f2fe)",
+            {/* Percentuale — aggiornata dallo stesso MotionValue */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              style={{
+                marginTop: "clamp(12px, 3vw, 18px)",
+                display: "flex", alignItems: "baseline", gap: 2,
+              }}
+            >
+              <span ref={numRef} style={{
+                fontSize: "clamp(26px, 7vw, 42px)",
+                fontWeight: 800,
+                fontFamily: "'Poppins', system-ui, sans-serif",
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+                background: GRAD,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
               }}>
-                <span style={{
-                  fontSize: "clamp(52px, 14vw, 120px)",
-                  fontWeight: 700,
-                  fontFamily: "'Clash Display', sans-serif",
-                  letterSpacing: "-0.06em",
-                  lineHeight: 0.9,
-                }}>
-                  {String(pct).padStart(2, "0")}
-                </span>
-                <span style={{
-                  fontSize: "clamp(16px, 4vw, 32px)",
-                  fontWeight: 400,
-                  fontFamily: "'Clash Display', sans-serif",
-                  marginTop: "clamp(5px, 1.2vw, 10px)",
-                  marginLeft: 3,
-                  lineHeight: 1,
-                }}>
-                  %
-                </span>
-              </div>
-
-              {/* Barra sottile */}
-              <div style={{
-                marginTop: 16,
-                width: 120,
-                height: 1,
-                background: "#1f2937",
-                borderRadius: 1,
-                overflow: "hidden",
-              }}>
-                <div style={{
-                  height: "100%",
-                  width: `${pct}%`,
-                  background: "linear-gradient(90deg, #38bdf8, #0ea5e9)",
-                  borderRadius: 1,
-                  transition: "width 0.05s linear",
-                }} />
-              </div>
-
-              {/* Tagline */}
+                00
+              </span>
               <span style={{
-                marginTop: 20,
-                fontSize: 10,
-                fontWeight: 500,
-                fontFamily: "'Clash Display', sans-serif",
-                letterSpacing: "0.22em",
-                color: "#1e3a5f",
-                textTransform: "uppercase",
+                fontSize: "clamp(12px, 3vw, 18px)",
+                fontWeight: 600,
+                fontFamily: "'Poppins', system-ui, sans-serif",
+                color: "#546e89",
+                marginBottom: 2,
               }}>
-                Impianti Elettrici · Padova
+                %
               </span>
             </motion.div>
 
-          </motion.div>
+          </div>
+
         </motion.div>
       )}
     </AnimatePresence>

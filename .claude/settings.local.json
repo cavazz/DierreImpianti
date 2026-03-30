@@ -6,7 +6,9 @@
       "Bash(python scripts/search.py \"electrical contractor construction trade professional service Italy\" --design-system -p \"Dierre Impianti\" -f markdown)",
       "Bash(npm run:*)",
       "WebFetch(domain:creads.studio)",
-      "WebFetch(domain:unsplash.com)"
+      "WebFetch(domain:unsplash.com)",
+      "Bash(node:*)",
+      "Bash(sips:*)"
     ]
   }
 }
